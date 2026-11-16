@@ -1,0 +1,604 @@
+{
+  "about": "Known weak points for common BMW engines in US cars. First pass for the Walkaround listing checker.",
+  "compiled": "2026-11-16",
+  "how_to_read": {
+    "shop_cost_usd": "[low, high] in US dollars as stated by the source, or null when the source gave no figure. Never invented.",
+    "severity": "Our own judgment of how bad it is if ignored: low, medium, high, critical.",
+    "risk": "Our own overall rating for a used buyer.",
+    "us_models": "Listed from general knowledge, not from the cited source. Verify before launch."
+  },
+  "known_gaps": [
+    "Many cost fields are empty and need real shop quotes",
+    "Each engine rests on one enthusiast source, a second source per engine is needed",
+    "US model and year lists are unverified",
+    "No per-model recall data yet, that comes from NHTSA by VIN"
+  ],
+  "engines": [
+    {
+      "code": "N52",
+      "desc": "3.0L inline-six, no turbo",
+      "years": "2004-2015",
+      "us_models": [
+        "E90/E92 325i, 328i, 330i",
+        "E60 525i, 528i, 530i",
+        "E82 128i",
+        "E83 X3 3.0si",
+        "E85/E89 Z4 3.0i, 30i"
+      ],
+      "risk": "low",
+      "verdict": "The dependable choice. Known leaks and cooling parts, few expensive surprises.",
+      "source": "https://bmwtuning.co/bmw-n52-engine-problems/",
+      "problems": [
+        {
+          "name": "Electric water pump",
+          "what_happens": "Plastic pump fails and the engine overheats, sometimes at idle.",
+          "typical_miles": "around 80,000",
+          "shop_cost_usd": [
+            700,
+            900
+          ],
+          "severity": "high"
+        },
+        {
+          "name": "Oil filter housing gasket",
+          "what_happens": "Oil leaks onto the drive belt. A soaked belt can slip or shred and damage the engine.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            150,
+            450
+          ],
+          "severity": "high",
+          "note": "Source calls this the most serious oil leak on the engine."
+        },
+        {
+          "name": "Valve cover and gasket",
+          "what_happens": "Gasket hardens or the plastic cover cracks. Oil on plugs, burning oil smell.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "medium",
+          "note": "Source gives parts about $450 and 6 to 8 hours labor, no shop total."
+        },
+        {
+          "name": "VANOS solenoids",
+          "what_happens": "Power loss, rough idle, limp mode.",
+          "typical_miles": "about every 70,000",
+          "shop_cost_usd": [
+            350,
+            400
+          ],
+          "severity": "low"
+        },
+        {
+          "name": "Lifter tick",
+          "what_happens": "Ticking when cold. Annoying, not harmful. Only engines built before December 2008.",
+          "typical_miles": "50,000+",
+          "shop_cost_usd": [
+            3000,
+            null
+          ],
+          "severity": "low",
+          "note": "Permanent fix is a revised cylinder head, $3k+. Most owners live with it."
+        },
+        {
+          "name": "Thermostat",
+          "what_happens": "Fails open (slow warm-up) or closed (overheating). Often done with the water pump.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            220,
+            270
+          ],
+          "severity": "medium"
+        }
+      ]
+    },
+    {
+      "code": "N54",
+      "desc": "3.0L inline-six, twin turbo",
+      "years": "2006-2016 (most US cars 2007-2010)",
+      "us_models": [
+        "E90/E92/E93 335i (2007-2010)",
+        "E60 535i (2008-2010)",
+        "E82/E88 135i (2008-2010)",
+        "E89 Z4 35i, 35is",
+        "E92 335is",
+        "E82 1M"
+      ],
+      "risk": "high",
+      "verdict": "Fast and loved by tuners, but the most repair-prone six here. Buy only with records.",
+      "source": "https://bmwtuning.co/8-most-common-bmw-n54-engine-problems/",
+      "problems": [
+        {
+          "name": "Turbo wastegate rattle and turbo failure",
+          "what_happens": "Rattle, low boost codes, power loss, smoke.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            3500,
+            6000
+          ],
+          "severity": "high",
+          "note": "$3,500 independent, $6,000 dealer per source. Extended turbo warranty (10 yr / 82k) has long expired."
+        },
+        {
+          "name": "High pressure fuel pump",
+          "what_happens": "Long crank, limp mode. Fails at random.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "high",
+          "note": "Part about $450 plus install. Extended warranty (10 yr / 120k) has expired on age."
+        },
+        {
+          "name": "Fuel injectors",
+          "what_happens": "Hard cold starts, misfires, rough idle.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            1500,
+            null
+          ],
+          "severity": "high",
+          "note": "About $1,400 in parts for a set plus coding and labor."
+        },
+        {
+          "name": "Electric water pump",
+          "what_happens": "Overheating, rapid coolant loss.",
+          "typical_miles": "70,000 to 80,000",
+          "shop_cost_usd": [
+            700,
+            900
+          ],
+          "severity": "high"
+        },
+        {
+          "name": "Valve cover and gasket",
+          "what_happens": "Oil on plugs and coils, burning oil smell.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            340,
+            1300
+          ],
+          "severity": "medium",
+          "note": "Dealer labor alone about $1,000 per source."
+        },
+        {
+          "name": "Carbon build-up on intake valves",
+          "what_happens": "Sluggish, misfires, hard starts. Needs walnut blasting.",
+          "typical_miles": "every 30,000 to 45,000",
+          "shop_cost_usd": null,
+          "severity": "low"
+        },
+        {
+          "name": "Plastic charge pipe",
+          "what_happens": "Cracks under boost, mostly on tuned cars.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            250,
+            null
+          ],
+          "severity": "low",
+          "note": "Upgraded pipe about $250 in parts."
+        }
+      ]
+    },
+    {
+      "code": "N55",
+      "desc": "3.0L inline-six, single turbo",
+      "years": "2009-2019 (US from 2010-2011)",
+      "us_models": [
+        "E90/E92 335i (2011-2013)",
+        "F30 335i (2012-2015)",
+        "F32 435i",
+        "F10 535i",
+        "E82 135i (2011-2013)",
+        "F22 M235i",
+        "F87 M2 (2016-2018)",
+        "F25 X3 35i",
+        "F26 X4 35i, M40i",
+        "E70/F15 X5 35i",
+        "E71/F16 X6 35i"
+      ],
+      "risk": "medium",
+      "verdict": "Fairly reliable, with a predictable list of gasket and cooling repairs around 80,000 to 100,000 miles.",
+      "source": "https://bmwtuning.co/n55-engine-problems/",
+      "problems": [
+        {
+          "name": "Valve cover and gasket",
+          "what_happens": "Oil on plugs, burning oil smell. The PCV valve is built into the cover and fails with it.",
+          "typical_miles": "80,000 to 100,000",
+          "shop_cost_usd": [
+            1000,
+            1300
+          ],
+          "severity": "medium",
+          "note": "$1,000 independent, $1,300 dealer per source."
+        },
+        {
+          "name": "Electric water pump and thermostat",
+          "what_happens": "Sudden overheating with little warning.",
+          "typical_miles": "about 100,000 on average, some as early as 30,000 to 40,000",
+          "shop_cost_usd": [
+            890,
+            950
+          ],
+          "severity": "high"
+        },
+        {
+          "name": "Oil filter housing gasket",
+          "what_happens": "Oil drips onto the belt tensioner and drive belt.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            410,
+            420
+          ],
+          "severity": "high",
+          "note": "Replace the whole housing on cars past 100,000 miles."
+        },
+        {
+          "name": "VANOS solenoids",
+          "what_happens": "Power loss, hesitation, rough idle.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            530,
+            null
+          ],
+          "severity": "low",
+          "note": "Two solenoids at about $165 each plus about $200 labor."
+        },
+        {
+          "name": "High pressure fuel pump",
+          "what_happens": "Mostly 2010 and early to mid 2011 cars. No extended warranty on this engine.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "medium"
+        }
+      ],
+      "also_reported": [
+        "Plastic charge pipe cracking under boost",
+        "Oil pan gasket leak"
+      ]
+    },
+    {
+      "code": "N20",
+      "desc": "2.0L four-cylinder turbo (N26 is the low-emissions version)",
+      "years": "2011-2017",
+      "us_models": [
+        "F30 328i, 320i (2012-2016)",
+        "F32 428i",
+        "F10 528i (2012-2016)",
+        "F22 228i (2014-2016)",
+        "E84 X1 28i",
+        "F25 X3 28i",
+        "F26 X4 28i",
+        "E89 Z4 28i"
+      ],
+      "risk": "high for early builds, medium for later ones",
+      "verdict": "Build date decides everything. Early engines can destroy themselves when the timing chain guides break.",
+      "source": "https://carcomplaints.com/news/2020/bmw-timing-chain-lawsuit-settlement-reached.shtml",
+      "extra_sources": [
+        "https://en.wikipedia.org/wiki/BMW_N20"
+      ],
+      "problems": [
+        {
+          "name": "Timing chain and oil pump chain guides",
+          "what_happens": "Plastic guides break up, the chain skips, and the engine can be destroyed with little warning. Often starts as a whine from the front of the engine.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            3000,
+            7500
+          ],
+          "severity": "critical",
+          "note": "Class action covered 2012-2015 model years. BMW extended chain coverage to 7 yr / 70k, with partial help to 8 yr / 100k. That coverage has expired on age for these cars, so ask for proof the chain was replaced. Cost range is the settlement's caps: $3,000 for the chain job, $7,500 for a failed engine."
+        }
+      ],
+      "also_reported": [
+        "Valve cover and gasket leaks",
+        "Oil filter housing gasket leaks",
+        "Electric water pump"
+      ],
+      "needs_checking": [
+        "Exact build month when the revised chain guides went in (commonly cited as early 2015)"
+      ]
+    },
+    {
+      "code": "B48",
+      "desc": "2.0L four-cylinder turbo (B46 is the low-emissions version)",
+      "years": "2014-present",
+      "us_models": [
+        "F30 330i (2017-2018), G20 330i",
+        "F32 430i",
+        "G30 530i",
+        "F22 230i",
+        "F48 X1 28i",
+        "G01 X3 30i",
+        "G02 X4 30i",
+        "G29 Z4 30i",
+        "MINI Cooper S"
+      ],
+      "risk": "low",
+      "verdict": "A big step up from the N20. Very few common problems so far.",
+      "source": "https://bmwtuning.co/ultimate-bmw-b48-engine-guide/",
+      "problems": [
+        {
+          "name": "Plastic oil filter housing",
+          "what_happens": "Housing cracks and can dump coolant within minutes, causing overheating.",
+          "typical_miles": "70,000 to 100,000",
+          "shop_cost_usd": null,
+          "severity": "high"
+        },
+        {
+          "name": "Valve cover gasket",
+          "what_happens": "Oil leak from the top of the engine.",
+          "typical_miles": "80,000 to 100,000",
+          "shop_cost_usd": null,
+          "severity": "medium",
+          "note": "Pricey because injectors must come out."
+        },
+        {
+          "name": "Cylinder head coolant vent line",
+          "what_happens": "Plastic line breaks and loses coolant fast.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            0,
+            0
+          ],
+          "severity": "medium",
+          "note": "BMW fixes this free as a service action. Ask a dealer to check the VIN."
+        }
+      ]
+    },
+    {
+      "code": "B58",
+      "desc": "3.0L inline-six, single turbo",
+      "years": "2015-present",
+      "us_models": [
+        "F30 340i (2016-2018), G20 M340i",
+        "F32 440i",
+        "G30 540i",
+        "F22 M240i",
+        "G01 X3 M40i",
+        "G02 X4 M40i",
+        "G05 X5 40i",
+        "G29 Z4 M40i",
+        "Toyota GR Supra 3.0"
+      ],
+      "risk": "low",
+      "verdict": "Widely regarded as one of the most reliable engines BMW has made. The safest turbo six to buy used.",
+      "source": "https://bmwtuning.co/the-5-most-common-bmw-b58-engine-problems/",
+      "problems": [
+        {
+          "name": "Coolant loss",
+          "what_happens": "Low coolant warnings, often from the water pump or a leaky cap. Small top-ups can be normal.",
+          "typical_miles": "water pump 75,000 to 100,000",
+          "shop_cost_usd": null,
+          "severity": "medium"
+        },
+        {
+          "name": "Valve cover gasket and PCV",
+          "what_happens": "Burning oil smell, oil on plugs. PCV diaphragm is built into the cover.",
+          "typical_miles": "70,000 to 100,000",
+          "shop_cost_usd": [
+            500,
+            1000
+          ],
+          "severity": "medium"
+        },
+        {
+          "name": "VANOS solenoids",
+          "what_happens": "Hesitation, rough idle, limp mode.",
+          "typical_miles": "80,000 to 100,000",
+          "shop_cost_usd": null,
+          "severity": "low"
+        },
+        {
+          "name": "Oil filter breaking apart",
+          "what_happens": "Filter element shears and leaves a piece in the housing. Usually not serious.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "low"
+        }
+      ]
+    },
+    {
+      "code": "N62",
+      "desc": "4.4L / 4.8L V8, no turbo",
+      "years": "2001-2010",
+      "us_models": [
+        "E60 545i, 550i",
+        "E63/E64 645Ci, 650i",
+        "E65/E66 745i, 750i",
+        "E53 X5 4.4i, 4.8is",
+        "E70 X5 4.8i"
+      ],
+      "risk": "high",
+      "verdict": "Cheap to buy, expensive to keep. Three known leaks that each cost four figures at a shop.",
+      "source": "https://bmwtuning.co/bmw-n62-common-problems-reliability-issues/",
+      "problems": [
+        {
+          "name": "Valve stem seals",
+          "what_happens": "Blue-white smoke on cold start or after idling, heavy oil use.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            1800,
+            3000
+          ],
+          "severity": "high",
+          "note": "Independent shop with the special tool. Used to be $5,000 to $10,000."
+        },
+        {
+          "name": "Coolant transfer pipe",
+          "what_happens": "Coolant leaks from a pipe buried in the engine valley.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            1000,
+            2500
+          ],
+          "severity": "high",
+          "note": "$4,000+ if done the factory way."
+        },
+        {
+          "name": "Alternator bracket gasket",
+          "what_happens": "Oil leak at the front of the engine.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            1000,
+            1500
+          ],
+          "severity": "medium"
+        },
+        {
+          "name": "Valve cover gaskets",
+          "what_happens": "Oil leak and burning oil smell.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            700,
+            1000
+          ],
+          "severity": "medium"
+        }
+      ]
+    },
+    {
+      "code": "N63",
+      "desc": "4.4L V8, twin turbo",
+      "years": "2008-present (several revisions)",
+      "us_models": [
+        "F10 550i",
+        "F12/F13 650i",
+        "F01/F02 750i, 750Li",
+        "E70/F15 X5 50i",
+        "E71/F16 X6 50i",
+        "F07 550i GT"
+      ],
+      "risk": "very high before 2016, medium after",
+      "verdict": "The cheap V8 BMW is cheap for a reason. Avoid 2008-2013 engines unless the price leaves room for an engine.",
+      "source": "https://bmwtuning.co/n63-engine-problems/",
+      "problems": [
+        {
+          "name": "Oil consumption and valve stem seals",
+          "what_happens": "Burns a quart every 600 to 1,000 miles, white smoke from the tailpipes.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "critical",
+          "note": "Seal job requires dropping the engine."
+        },
+        {
+          "name": "Timing chain stretch",
+          "what_happens": "2008-2014 engines. Chain can jump and bend valves.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            null,
+            15000
+          ],
+          "severity": "critical",
+          "note": "Can exceed $15,000 per source."
+        },
+        {
+          "name": "Fuel injectors",
+          "what_happens": "Rough idle, misfires, black soot on the bumper.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "high",
+          "note": "$200 to $300 per injector, eight of them, plus labor."
+        },
+        {
+          "name": "Battery drain",
+          "what_happens": "Batteries wear out fast. BMW calls for a new one every other oil change.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "low"
+        }
+      ],
+      "buyer_note": "Ask whether BMW's Customer Care Package work (2014-2015) was done and get it in writing from a dealer by VIN. Source advises 2016 or newer."
+    },
+    {
+      "code": "S65",
+      "desc": "4.0L V8, no turbo (M3)",
+      "years": "2007-2013",
+      "us_models": [
+        "E90 M3 sedan (2008-2011)",
+        "E92 M3 coupe (2008-2013)",
+        "E93 M3 convertible (2008-2013)"
+      ],
+      "risk": "high without rod bearing proof",
+      "verdict": "A special engine with one big question: have the rod bearings been replaced, and when.",
+      "source": "https://europremiumparts.com/blogs/bmw-buying-guides/bmw-s65-engine-guide-reliability-common-problems-tuning-potential",
+      "problems": [
+        {
+          "name": "Rod bearing wear",
+          "what_happens": "Bearings wear early. If one fails, the engine is destroyed. Preventive replacement is the norm.",
+          "typical_miles": "40,000 to 80,000",
+          "shop_cost_usd": null,
+          "severity": "critical",
+          "note": "Source recommends preventive replacement at 40,000 to 50,000 miles. Cost not in source, needs a shop quote."
+        },
+        {
+          "name": "Throttle actuators",
+          "what_happens": "Check engine light, limp mode. Two actuators, labor heavy.",
+          "typical_miles": "60,000 to 100,000",
+          "shop_cost_usd": null,
+          "severity": "high"
+        },
+        {
+          "name": "VANOS solenoids and seals",
+          "what_happens": "Rough idle, lost low-end torque.",
+          "typical_miles": "60,000 to 90,000",
+          "shop_cost_usd": null,
+          "severity": "medium"
+        },
+        {
+          "name": "Oil consumption",
+          "what_happens": "Uses oil between changes.",
+          "typical_miles": "50,000+",
+          "shop_cost_usd": null,
+          "severity": "low"
+        }
+      ]
+    },
+    {
+      "code": "S55",
+      "desc": "3.0L inline-six, twin turbo (M2 Competition, M3, M4)",
+      "years": "2014-2020",
+      "us_models": [
+        "F80 M3 (2015-2018)",
+        "F82/F83 M4 (2015-2020)",
+        "F87 M2 Competition (2019-2021)"
+      ],
+      "risk": "medium",
+      "verdict": "Solid for an M engine. The famous crank hub issue is rare on stock cars.",
+      "source": "https://bmwtuning.co/the-4-most-common-bmw-s55-engine-problems/",
+      "problems": [
+        {
+          "name": "Crank hub slip",
+          "what_happens": "Sudden limp mode and rough running when the timing slips. Source puts reports under 1% of cars.",
+          "typical_miles": null,
+          "shop_cost_usd": null,
+          "severity": "high",
+          "note": "More of a concern on tuned cars. Ask if the car has been tuned."
+        },
+        {
+          "name": "Valve cover and gasket",
+          "what_happens": "Burning oil smell, oil on plugs.",
+          "typical_miles": "80,000 to 100,000+",
+          "shop_cost_usd": null,
+          "severity": "medium"
+        },
+        {
+          "name": "Oil pan gasket",
+          "what_happens": "Slow leak. Subframe has to come down.",
+          "typical_miles": null,
+          "shop_cost_usd": [
+            null,
+            4500
+          ],
+          "severity": "medium",
+          "note": "One reader reported a $4,500 dealer quote."
+        },
+        {
+          "name": "Oil filter housing gasket",
+          "what_happens": "Oil leak onto the belt.",
+          "typical_miles": "80,000 to 100,000+",
+          "shop_cost_usd": null,
+          "severity": "medium"
+        }
+      ]
+    }
+  ]
+}
