@@ -229,6 +229,9 @@ section .wrap { padding-block: 48px; display: flex; flex-direction: column; gap:
 .cta { padding: clamp(28px, 6vw, 56px); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; background: linear-gradient(140deg, color-mix(in srgb, var(--blue) 34%, transparent), color-mix(in srgb, var(--sky) 14%, transparent) 55%, color-mix(in srgb, var(--coral) 20%, transparent)), var(--glass); }
 .join { display: flex; gap: 8px; width: 100%; max-width: 520px; padding: 8px; border-radius: 999px; background: var(--glass-strong); border: 1px solid var(--line); }
 .status { font-size: 0.92rem; color: var(--ok); min-height: 1.5em; }
+.status.error { color: var(--coral); }
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.btn[disabled] { opacity: 0.6; cursor: progress; transform: none; }
 footer .wrap { padding-block: 20px 44px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -267,7 +270,7 @@ footer .wrap { padding-block: 20px 44px; }
       <input id="listing-input" type="text" aria-label="Listing link or VIN" placeholder="Paste a listing link or VIN">
       <button class="btn" type="submit">Check this listing</button>
     </form>
-    <p class="hint">Preview draft, not live yet. The button jumps to a sample report.</p>
+    <p class="hint">Not live yet. The button jumps to a sample report.</p>
     </div>
     <div class="card peek" aria-label="Example result">
       <div class="peek-top"><h3>2013 BMW 335i</h3><span class="pill mid">Example</span></div>
@@ -520,8 +523,10 @@ footer .wrap { padding-block: 20px 44px; }
     <div class="card cta">
       <h2>Get your first reports <span class="grad-text">free</span></h2>
       <p class="sub">Leave your email and the first 100 people get three full reports at no charge when Walkaround opens.</p>
-      <form class="join" id="join-form">
-        <input id="join-email" type="email" aria-label="Email address" placeholder="you@example.com" required>
+      <form class="join" id="join-form" action="https://formspree.io/f/myeweqok" method="POST">
+        <input id="join-email" name="email" type="email" aria-label="Email address" placeholder="you@example.com" autocomplete="email" required>
+        <input class="trap" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="source" value="landing-page-waitlist">
         <button class="btn" type="submit">Join the waitlist</button>
       </form>
       <p class="status" id="join-status" role="status"></p>
@@ -552,9 +557,30 @@ footer .wrap { padding-block: 20px 44px; }
     e.preventDefault();
     document.getElementById('sample').scrollIntoView({ behavior: 'smooth' });
   });
-  document.getElementById('join-form').addEventListener('submit', function (e) {
+  var joinForm = document.getElementById('join-form');
+  var joinStatus = document.getElementById('join-status');
+  joinForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    document.getElementById('join-status').textContent = 'Preview only. Nothing was saved. The form gets connected when the page goes live.';
+    var button = joinForm.querySelector('button');
+    function say(text, isError) {
+      joinStatus.textContent = text;
+      joinStatus.classList.toggle('error', !!isError);
+    }
+    button.disabled = true;
+    say('Adding you to the list.');
+    fetch(joinForm.action, {
+      method: 'POST',
+      body: new FormData(joinForm),
+      headers: { Accept: 'application/json' }
+    }).then(function (res) {
+      if (!res.ok) { throw new Error('Request failed'); }
+      joinForm.reset();
+      say('You are on the list. We will email you when Walkaround opens.');
+    }).catch(function () {
+      say('That did not go through. Check the address and try again in a minute.', true);
+    }).then(function () {
+      button.disabled = false;
+    });
   });
 })();
 </script>
