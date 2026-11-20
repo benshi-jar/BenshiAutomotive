@@ -23,7 +23,7 @@ Engine 3.0L I6 24V GDI DOHC Turbo
 VIN WBA3B9C50DF000101
 Stock # P1234
 Mileage 94,512 mi.`,
-    want: { vin: 'WBA3B9C50DF000101', miles: 94512, price: 13500, year: 2013, model: '335 i xDrive' }
+    want: { vin: 'WBA3B9C50DF000101', miles: 94512, price: 13500, year: 2013, model: '335 i xDrive', market: { amount: 1240, below: true } }
   },
   {
     name: 'Autotrader style',
@@ -38,7 +38,7 @@ Engine: 6-Cylinder Turbo
 VIN: 5UXKR0C51G0000202
 Fuel Economy: 18 City / 25 Highway
 Warranty: 4 yr / 50,000 mi basic`,
-    want: { vin: '5UXKR0C51G0000202', miles: 94512, price: 21995, year: 2016, model: 'X5 xDrive35i' }
+    want: { vin: '5UXKR0C51G0000202', miles: 94512, price: 21995, year: 2016, model: 'X5 xDrive35i', market: null }
   },
   {
     name: 'CarGurus style',
@@ -51,7 +51,7 @@ Est. $295/mo
 VIN: WBA3N7C56EK000303
 Fuel economy 23 / 35 mpg
 32 mi away from 11779`,
-    want: { vin: 'WBA3N7C56EK000303', miles: 88201, price: 14990, year: 2014, model: '4 Series 428i Coupe RWD' }
+    want: { vin: 'WBA3N7C56EK000303', miles: 88201, price: 14990, year: 2014, model: '4 Series 428i Coupe RWD', market: { amount: 1105, below: true } }
   },
   {
     name: 'Facebook Marketplace style, no VIN',
@@ -65,7 +65,7 @@ Exterior color: Black · Interior color: Beige
 Clean title
 Seller's description
 Runs great, new tires. Oil changed every 5,000 miles. Asking $7,800 obo, no lowballs. Original price $9,000.`,
-    want: { vin: null, miles: 112000, price: 7800, year: 2011, model: '328i Sedan 4D' }
+    want: { vin: null, miles: 112000, price: 7800, year: 2011, model: '328i Sedan 4D', market: null }
   },
   {
     name: 'Craigslist style',
@@ -76,7 +76,7 @@ odometer: 128000
 title status: clean
 VIN: WBAPM7C55AE000404
 2010 bmw 335i sedan. HPFP replaced 2019. $9500 firm.`,
-    want: { vin: 'WBAPM7C55AE000404', miles: 128000, price: 9500, year: 2010, model: '335i' }
+    want: { vin: 'WBAPM7C55AE000404', miles: 128000, price: 9500, year: 2010, model: '335i', market: null }
   },
   {
     name: 'CarMax style, K miles',
@@ -86,7 +86,7 @@ $27,998*
 Est. $512/mo
 VIN 5UXTR9C58KL000505
 Stock # 12345678`,
-    want: { vin: '5UXTR9C58KL000505', miles: 39000, price: 27998, year: 2019, model: 'X3 xDrive30i' }
+    want: { vin: '5UXTR9C58KL000505', miles: 39000, price: 27998, year: 2019, model: 'X3 xDrive30i', market: null }
   },
   {
     name: 'Dealer site with MSRP and savings',
@@ -96,12 +96,52 @@ Savings $3,000
 Sale Price $21,500
 Odometer: 61,340
 Under 100k miles and one owner!`,
-    want: { vin: null, miles: 61340, price: 21500, year: 2018, model: '540i xDrive Sedan' }
+    want: { vin: null, miles: 61340, price: 21500, year: 2018, model: '540i xDrive Sedan', market: null }
+  },
+  {
+    // Trimmed from a real CarGurus page copied with Ctrl+A (VIN swapped for a made-up one).
+    // The "More listings" strip at the bottom has other cars' prices and mileage.
+    name: 'CarGurus real page layout',
+    text: `AD
+2018 BMW 5 Series 540i Sedan RWD
+Brooklyn, NY
+$14,367
+Price includes fees
+Good Deal
+$872 below market
+Features
+Mileage
+113,546
+Engine
+335 hp 3L I6
+Overview
+Make:BMW
+Model:5 Series
+Year:2018
+Trim:540i Sedan RWD
+Mileage:113,546 mi
+VIN:WBAJE5C5XJW000707
+Pricing
+IMV$14,367
+Estimate monthly payment
+$252/mo*
+Recommended down payments
+$1,000$235/mo$2,000$217/mo$5,000$165/mo
+Shorten to 60 months to save $864 in total interest • $288/mo
+More listings from this dealer
+2017 BMW 5 Series
+530i xDrive Sedan AWD112K mi
+$10,863
+Est. $191/mo
+2015 Chevrolet Equinox
+1LT FWD252K mi
+$2,170`,
+    want: { vin: 'WBAJE5C5XJW000707', miles: 113546, price: 14367, year: 2018, model: '5 Series 540i Sedan RWD', market: { amount: 872, below: true } }
   },
   {
     name: 'Nothing useful',
     text: 'Great car, message me for details.',
-    want: { vin: null, miles: null, price: null, year: null, model: null }
+    want: { vin: null, miles: null, price: null, year: null, model: null, market: null }
   }
 ];
 
@@ -127,6 +167,8 @@ assert.strictEqual(parseListing('Similar: 4T1BF1FK90U000606\nVIN WBA3N7C56EK0003
 // Phrases about mileage that are not the car's mileage.
 assert.strictEqual(parseListing('Never driven over 100k miles. Under 90k miles, every 5,000 miles oil.').miles, null);
 assert.strictEqual(parseListing('Only 85k miles, under 100k!').miles, 85000);
+
+assert.deepStrictEqual(parseListing('$1,500 above market').market, { amount: 1500, below: false });
 
 if (failed) { console.log(failed + ' failed'); process.exit(1); }
 console.log('all passed');
