@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy | Walkaround</title>
+<meta name="description" content="What the Walkaround checker and Chrome extension read, what they send, and what is kept.">
+<link rel="canonical" href="https://benshiautomotive.vercel.app/privacy">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><b></b><b></b><b></b></div>
+
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <a class="brand" href="/">walk<span class="grad-text">around</span></a>
+      <nav aria-label="Sections">
+        <a href="/check">Check a car</a>
+        <a href="/engines">Engine guides</a>
+        <a href="/#faq">FAQ</a>
+      </nav>
+      <a class="btn small" href="/check">Check a car</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="guide">
+  <div class="wrap prose">
+    <span class="eyebrow">Privacy</span>
+    <h1>What Walkaround <span class="grad-text">sees and keeps</span></h1>
+    <p class="sub">Short version: we only use the car details needed to build a report, we do not store them, and we never sell anything. Updated November 20, 2026.</p>
+
+    <h2>The checker on this site</h2>
+    <p>When you check a car, the VIN, year, model, mileage and asking price you enter are sent to our server so it can look up the VIN and recalls with NHTSA, the US government safety agency. We do not save them in a database. Text you paste into the "paste the whole listing" box stays in your browser; only the details picked out of it are sent.</p>
+    <p>Report links put the car details in the web address so you can share them. Anyone you send a link to can see those details.</p>
+
+    <h2>The Walkaround Chrome extension</h2>
+    <p>The extension only runs on car listing pages on CarGurus, Cars.com, Autotrader, CarMax, Carvana, TrueCar, Facebook Marketplace and Craigslist. It reads the listing in your browser to find the VIN, year, model, mileage and asking price, and sends only those values to our server to build the report.</p>
+    <p>It does not send the page text, the page address, your browsing history, or anything about you. It does not use cookies, does not track you across sites, shows no ads, and does not sell or share data.</p>
+
+    <h2>Feedback and the waitlist</h2>
+    <p>Feedback and waitlist forms are handled by Formspree, which emails them to us. Your email address is only collected if you type it in, and it is only used to reply or to tell you when we add more makes. Ask through the feedback form and we will delete it.</p>
+
+    <h2>Services we rely on</h2>
+    <p>The site is hosted on Vercel, which keeps standard request logs (such as IP address, time and the request itself) for a limited time. Fonts load from Google Fonts. VIN and recall lookups go to NHTSA. Each has its own privacy policy.</p>
+
+    <h2>Questions</h2>
+    <p>Use the <a href="/check#feedback">feedback form</a> and we will get back to you if you leave an email.</p>
+  </div>
+</section>
+
+<section id="waitlist">
+  <div class="wrap">
+    <div class="card cta">
+      <h2>Checking a specific car? <span class="grad-text">Run it free</span></h2>
+      <p class="sub">The <a href="/check">Walkaround checker</a> takes the VIN or year and model, the mileage and the asking price, and tells you what is due, which recalls apply, and what to offer. Free while in beta. Leave your email to hear when we add more makes.</p>
+      <p><a class="btn" href="/check">Check a car</a></p>
+      <form class="join" id="join-form" action="https://formspree.io/f/myeweqok" method="POST">
+        <input id="join-email" name="email" type="email" aria-label="Email address" placeholder="you@example.com" autocomplete="email" required>
+        <input class="trap" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="source" value="engine-guide/privacy">
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="status" id="join-status" role="status"></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="fine">Walkaround is independent and is not affiliated with, sponsored by, or endorsed by BMW AG. These guides are general information and do not replace an inspection by a qualified mechanic. Repair costs are estimates quoted from the linked sources and vary by shop and region. <a href="/privacy">Privacy</a></p>
+  </div>
+</footer>
+
+<script src="/site.js" defer></script>
+</body>
+</html>

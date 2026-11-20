@@ -6,6 +6,7 @@ files in engines/ and sitemap.xml. The site itself has no build step.
 """
 import html
 import json
+import shutil
 from pathlib import Path
 
 SITE = "https://benshiautomotive.vercel.app"
@@ -87,7 +88,7 @@ def page(title, description, path, body):
 
 <footer>
   <div class="wrap">
-    <p class="fine">Walkaround is independent and is not affiliated with, sponsored by, or endorsed by BMW AG. These guides are general information and do not replace an inspection by a qualified mechanic. Repair costs are estimates quoted from the linked sources and vary by shop and region.</p>
+    <p class="fine">Walkaround is independent and is not affiliated with, sponsored by, or endorsed by BMW AG. These guides are general information and do not replace an inspection by a qualified mechanic. Repair costs are estimates quoted from the linked sources and vary by shop and region. <a href="/privacy">Privacy</a></p>
   </div>
 </footer>
 
@@ -186,6 +187,40 @@ def index_page(engines):
     )
 
 
+def privacy_page():
+    body = """<section class="guide">
+  <div class="wrap prose">
+    <span class="eyebrow">Privacy</span>
+    <h1>What Walkaround <span class="grad-text">sees and keeps</span></h1>
+    <p class="sub">Short version: we only use the car details needed to build a report, we do not store them, and we never sell anything. Updated November 20, 2026.</p>
+
+    <h2>The checker on this site</h2>
+    <p>When you check a car, the VIN, year, model, mileage and asking price you enter are sent to our server so it can look up the VIN and recalls with NHTSA, the US government safety agency. We do not save them in a database. Text you paste into the "paste the whole listing" box stays in your browser; only the details picked out of it are sent.</p>
+    <p>Report links put the car details in the web address so you can share them. Anyone you send a link to can see those details.</p>
+
+    <h2>The Walkaround Chrome extension</h2>
+    <p>The extension only runs on car listing pages on CarGurus, Cars.com, Autotrader, CarMax, Carvana, TrueCar, Facebook Marketplace and Craigslist. It reads the listing in your browser to find the VIN, year, model, mileage and asking price, and sends only those values to our server to build the report.</p>
+    <p>It does not send the page text, the page address, your browsing history, or anything about you. It does not use cookies, does not track you across sites, shows no ads, and does not sell or share data.</p>
+
+    <h2>Feedback and the waitlist</h2>
+    <p>Feedback and waitlist forms are handled by Formspree, which emails them to us. Your email address is only collected if you type it in, and it is only used to reply or to tell you when we add more makes. Ask through the feedback form and we will delete it.</p>
+
+    <h2>Services we rely on</h2>
+    <p>The site is hosted on Vercel, which keeps standard request logs (such as IP address, time and the request itself) for a limited time. Fonts load from Google Fonts. VIN and recall lookups go to NHTSA. Each has its own privacy policy.</p>
+
+    <h2>Questions</h2>
+    <p>Use the <a href="/check#feedback">feedback form</a> and we will get back to you if you leave an email.</p>
+  </div>
+</section>
+"""
+    return page(
+        "Privacy | Walkaround",
+        "What the Walkaround checker and Chrome extension read, what they send, and what is kept.",
+        "/privacy",
+        body,
+    )
+
+
 DATA = json.loads((ROOT / "data" / "engines.json").read_text())
 
 
@@ -194,7 +229,10 @@ def main():
     out = ROOT / "engines"
     out.mkdir(exist_ok=True)
     (out / "index.html").write_text(index_page(engines))
-    urls = ["/", "/check", "/engines"]
+    (ROOT / "privacy.html").write_text(privacy_page())
+    # The Chrome extension carries its own copy of the listing parser.
+    shutil.copyfile(ROOT / "listing-parse.js", ROOT / "extension" / "listing-parse.js")
+    urls = ["/", "/check", "/engines", "/privacy"]
     for e in engines:
         (out / f"{e['code'].lower()}.html").write_text(engine_page(e, engines))
         urls.append(f"/engines/{e['code'].lower()}")
@@ -202,7 +240,7 @@ def main():
     sitemap += "".join(f"  <url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n"
     (ROOT / "sitemap.xml").write_text(sitemap)
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
-    print(f"Wrote {len(engines)} engine pages, the index, sitemap.xml and robots.txt")
+    print(f"Wrote {len(engines)} engine pages, the index, the privacy page, sitemap.xml, robots.txt and extension/listing-parse.js")
 
 
 if __name__ == "__main__":

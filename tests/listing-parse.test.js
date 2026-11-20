@@ -170,5 +170,11 @@ assert.strictEqual(parseListing('Only 85k miles, under 100k!').miles, 85000);
 
 assert.deepStrictEqual(parseListing('$1,500 above market').market, { amount: 1500, below: false });
 
+// The Chrome extension ships its own copy of the parser; build.py keeps it in sync.
+const fs = require('fs');
+const path = require('path');
+assert.strictEqual(fs.readFileSync(path.join(__dirname, '../extension/listing-parse.js'), 'utf8'),
+  fs.readFileSync(path.join(__dirname, '../listing-parse.js'), 'utf8'), 'extension/listing-parse.js is out of date: run python3 build.py');
+
 if (failed) { console.log(failed + ' failed'); process.exit(1); }
 console.log('all passed');
