@@ -17,13 +17,12 @@
     <div class="nav">
       <a class="brand" href="/">walk<span class="grad-text">around</span></a>
       <nav aria-label="Sections">
+        <a href="/check">Check a car</a>
         <a href="#sample">Sample report</a>
-        <a href="#browse">Browse</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
         <a href="/engines">Engine guides</a>
+        <a href="#faq">FAQ</a>
       </nav>
-      <a class="btn small" href="#waitlist">Join waitlist</a>
+      <a class="btn small" href="/check">Check a car</a>
     </div>
   </div>
 </header>
@@ -32,14 +31,14 @@
 <section class="hero">
   <div class="wrap">
     <div class="hero-copy">
-    <span class="eyebrow"><i></i>Used BMW listing checker for US buyers</span>
-    <h1>Know what that BMW will <span class="grad-text">really cost you</span> before you message the seller.</h1>
-    <p class="lede">Paste a listing link or a VIN. Walkaround names the engine, lists what usually breaks at that mileage, shows open recalls, and tells you whether to buy, negotiate, or walk.</p>
-    <form class="check" id="check-form">
-      <input id="listing-input" type="text" aria-label="Listing link or VIN" placeholder="Paste a listing link or VIN">
-      <button class="btn" type="submit">Check this listing</button>
+    <span class="eyebrow"><i></i>Free used BMW checker for US buyers</span>
+    <h1>Know what that BMW will <span class="grad-text">really cost you</span>, then negotiate like you know.</h1>
+    <p class="lede">Enter the VIN, mileage and asking price. Walkaround names the engine, shows what is due at that mileage and any recalls, then gives you an opening offer and the exact words to use with the seller.</p>
+    <form class="check" id="check-form" action="/check" method="GET">
+      <input id="listing-input" name="vin" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="17" aria-label="VIN, optional" placeholder="Enter a VIN, or leave blank">
+      <button class="btn" type="submit">Check a car</button>
     </form>
-    <p class="hint">Not live yet. The button jumps to a sample report.</p>
+    <p class="hint">Free while in beta. No account, no app to download.</p>
     </div>
     <div class="card peek" aria-label="Example result">
       <div class="peek-top"><h3>2013 BMW 335i</h3><span class="pill mid">Example</span></div>
@@ -238,7 +237,8 @@
 <section id="pricing">
   <div class="wrap">
     <span class="eyebrow">Pricing</span>
-    <h2>Free to check. Pay only for the full report.</h2>
+    <h2>Free while in beta.</h2>
+    <p class="sub">Everything below is free while we test Walkaround. These are the prices we expect to charge later, and early users will hear first.</p>
     <div class="plans">
       <div class="card plan">
         <h3>Quick check</h3>
@@ -282,7 +282,7 @@
       <details class="q" id="faq-2"><summary>Where does the information come from?</summary><p>Recalls come from NHTSA, the US government safety agency. Engine and model details come from decoding the VIN. Weak points are the well-documented issues for each engine, and cost ranges are based on independent shop pricing.</p></details>
       <details class="q" id="faq-3"><summary>Which cars are covered?</summary><p>BMW first. Other German makes are next, followed by Japanese, Korean, and American makes.</p></details>
       <details class="q" id="faq-4"><summary>Do I need the VIN?</summary><p>A listing link is enough to identify the engine and its weak points. The VIN is needed to check recalls for that exact car, so ask the seller for it if the listing leaves it out.</p></details>
-      <details class="q" id="faq-5"><summary>When does it launch, and what will it cost?</summary><p>It is not live yet. Join the waitlist to hear first. The quick check will be free, and the planned price for a full report is $7 per car.</p></details>
+      <details class="q" id="faq-5"><summary>When does it launch, and what will it cost?</summary><p>The checker is live and free while in beta. <a href="/check">Try it here</a>. Later the quick check stays free and the full negotiation report is planned at $7 per car.</p></details>
     </div>
   </div>
 </section>
@@ -290,8 +290,8 @@
 <section id="waitlist">
   <div class="wrap">
     <div class="card cta">
-      <h2>Get your first reports <span class="grad-text">free</span></h2>
-      <p class="sub">Leave your email and the first 100 people get three full reports at no charge when Walkaround opens.</p>
+      <h2>Hear when we add <span class="grad-text">more makes</span></h2>
+      <p class="sub">Audi, Mercedes, Toyota and more are next, followed by a browser extension that checks listings for you. Leave your email to hear first.</p>
       <form class="join" id="join-form" action="https://formspree.io/f/myeweqok" method="POST">
         <input id="join-email" name="email" type="email" aria-label="Email address" placeholder="you@example.com" autocomplete="email" required>
         <input class="trap" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">

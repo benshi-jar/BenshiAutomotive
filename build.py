@@ -56,11 +56,11 @@ def page(title, description, path, body):
     <div class="nav">
       <a class="brand" href="/">walk<span class="grad-text">around</span></a>
       <nav aria-label="Sections">
-        <a href="/#sample">Sample report</a>
-        <a href="/#pricing">Pricing</a>
+        <a href="/check">Check a car</a>
         <a href="/engines">Engine guides</a>
+        <a href="/#faq">FAQ</a>
       </nav>
-      <a class="btn small" href="#waitlist">Join waitlist</a>
+      <a class="btn small" href="/check">Check a car</a>
     </div>
   </div>
 </header>
@@ -70,8 +70,9 @@ def page(title, description, path, body):
 <section id="waitlist">
   <div class="wrap">
     <div class="card cta">
-      <h2>Checking a specific car? <span class="grad-text">Get a report</span></h2>
-      <p class="sub">Walkaround turns a listing or VIN into a report like this for that exact car. Leave your email and the first 100 people get three full reports at no charge.</p>
+      <h2>Checking a specific car? <span class="grad-text">Run it free</span></h2>
+      <p class="sub">The <a href="/check">Walkaround checker</a> takes the VIN or year and model, the mileage and the asking price, and tells you what is due, which recalls apply, and what to offer. Free while in beta. Leave your email to hear when we add more makes.</p>
+      <p><a class="btn" href="/check">Check a car</a></p>
       <form class="join" id="join-form" action="{FORM}" method="POST">
         <input id="join-email" name="email" type="email" aria-label="Email address" placeholder="you@example.com" autocomplete="email" required>
         <input class="trap" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -193,7 +194,7 @@ def main():
     out = ROOT / "engines"
     out.mkdir(exist_ok=True)
     (out / "index.html").write_text(index_page(engines))
-    urls = ["/", "/engines"]
+    urls = ["/", "/check", "/engines"]
     for e in engines:
         (out / f"{e['code'].lower()}.html").write_text(engine_page(e, engines))
         urls.append(f"/engines/{e['code'].lower()}")

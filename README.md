@@ -7,6 +7,8 @@ A used BMW listing checker for US buyers. Paste a listing link or VIN and get th
 Landing page only, built to test demand before the real tool is written.
 
 - `index.html` is the home page. `styles.css` and `site.js` are shared by every page.
+- `check.html` and `checker.js` are the free checker. It runs in the browser and uses two small server functions in `api/`: `api/vin.js` decodes a VIN and `api/recalls.js` looks up recalls, both through NHTSA's free public services. Vercel runs anything in `api/` automatically.
+- `data/models.json` says which engine each model and model year has. It was written from general knowledge and still needs checking against a reference.
 - `engines/` holds one guide page per BMW engine. They are generated from `data/engines.json` by `build.py`.
 - To change a guide, edit `data/engines.json`, run `python3 build.py`, and commit the result. Deploying needs no build step.
 - The waitlist form sends signups to a Formspree form, which emails them to the owner.
