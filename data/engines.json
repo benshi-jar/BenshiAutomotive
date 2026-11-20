@@ -5,7 +5,8 @@
     "shop_cost_usd": "[low, high] in US dollars as stated by the source, or null when the source gave no figure. Never invented.",
     "severity": "Our own judgment of how bad it is if ignored: low, medium, high, critical.",
     "risk": "Our own overall rating for a used buyer.",
-    "us_models": "Listed from general knowledge, not from the cited source. Verify before launch."
+    "us_models": "Listed from general knowledge, not from the cited source. Verify before launch.",
+    "due_from_miles": "Lowest mileage at which the source says the problem typically appears, as a number. Null when the source gave no mileage, meaning it can happen at any point."
   },
   "known_gaps": [
     "Many cost fields are empty and need real shop quotes",
@@ -37,7 +38,8 @@
             700,
             900
           ],
-          "severity": "high"
+          "severity": "high",
+          "due_from_miles": 80000
         },
         {
           "name": "Oil filter housing gasket",
@@ -48,7 +50,8 @@
             450
           ],
           "severity": "high",
-          "note": "Source calls this the most serious oil leak on the engine."
+          "note": "Source calls this the most serious oil leak on the engine.",
+          "due_from_miles": null
         },
         {
           "name": "Valve cover and gasket",
@@ -56,7 +59,8 @@
           "typical_miles": null,
           "shop_cost_usd": null,
           "severity": "medium",
-          "note": "Source gives parts about $450 and 6 to 8 hours labor, no shop total."
+          "note": "Source gives parts about $450 and 6 to 8 hours labor, no shop total.",
+          "due_from_miles": null
         },
         {
           "name": "VANOS solenoids",
@@ -66,7 +70,8 @@
             350,
             400
           ],
-          "severity": "low"
+          "severity": "low",
+          "due_from_miles": 70000
         },
         {
           "name": "Lifter tick",
@@ -77,7 +82,8 @@
             null
           ],
           "severity": "low",
-          "note": "Permanent fix is a revised cylinder head, $3k+. Most owners live with it."
+          "note": "Permanent fix is a revised cylinder head, $3k+. Most owners live with it.",
+          "due_from_miles": 50000
         },
         {
           "name": "Thermostat",
@@ -87,7 +93,8 @@
             220,
             270
           ],
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": null
         }
       ]
     },
@@ -116,7 +123,8 @@
             6000
           ],
           "severity": "high",
-          "note": "$3,500 independent, $6,000 dealer per source. Extended turbo warranty (10 yr / 82k) has long expired."
+          "note": "$3,500 independent, $6,000 dealer per source. Extended turbo warranty (10 yr / 82k) has long expired.",
+          "due_from_miles": null
         },
         {
           "name": "High pressure fuel pump",
@@ -124,7 +132,8 @@
           "typical_miles": null,
           "shop_cost_usd": null,
           "severity": "high",
-          "note": "Part about $450 plus install. Extended warranty (10 yr / 120k) has expired on age."
+          "note": "Part about $450 plus install. Extended warranty (10 yr / 120k) has expired on age.",
+          "due_from_miles": null
         },
         {
           "name": "Fuel injectors",
@@ -135,7 +144,8 @@
             null
           ],
           "severity": "high",
-          "note": "About $1,400 in parts for a set plus coding and labor."
+          "note": "About $1,400 in parts for a set plus coding and labor.",
+          "due_from_miles": null
         },
         {
           "name": "Electric water pump",
@@ -145,7 +155,8 @@
             700,
             900
           ],
-          "severity": "high"
+          "severity": "high",
+          "due_from_miles": 70000
         },
         {
           "name": "Valve cover and gasket",
@@ -156,14 +167,16 @@
             1300
           ],
           "severity": "medium",
-          "note": "Dealer labor alone about $1,000 per source."
+          "note": "Dealer labor alone about $1,000 per source.",
+          "due_from_miles": null
         },
         {
           "name": "Carbon build-up on intake valves",
           "what_happens": "Sluggish, misfires, hard starts. Needs walnut blasting.",
           "typical_miles": "every 30,000 to 45,000",
           "shop_cost_usd": null,
-          "severity": "low"
+          "severity": "low",
+          "due_from_miles": 30000
         },
         {
           "name": "Plastic charge pipe",
@@ -174,7 +187,8 @@
             null
           ],
           "severity": "low",
-          "note": "Upgraded pipe about $250 in parts."
+          "note": "Upgraded pipe about $250 in parts.",
+          "due_from_miles": null
         }
       ]
     },
@@ -208,7 +222,8 @@
             1300
           ],
           "severity": "medium",
-          "note": "$1,000 independent, $1,300 dealer per source."
+          "note": "$1,000 independent, $1,300 dealer per source.",
+          "due_from_miles": 80000
         },
         {
           "name": "Electric water pump and thermostat",
@@ -218,7 +233,8 @@
             890,
             950
           ],
-          "severity": "high"
+          "severity": "high",
+          "due_from_miles": 100000
         },
         {
           "name": "Oil filter housing gasket",
@@ -229,7 +245,8 @@
             420
           ],
           "severity": "high",
-          "note": "Replace the whole housing on cars past 100,000 miles."
+          "note": "Replace the whole housing on cars past 100,000 miles.",
+          "due_from_miles": null
         },
         {
           "name": "VANOS solenoids",
@@ -240,14 +257,16 @@
             null
           ],
           "severity": "low",
-          "note": "Two solenoids at about $165 each plus about $200 labor."
+          "note": "Two solenoids at about $165 each plus about $200 labor.",
+          "due_from_miles": null
         },
         {
           "name": "High pressure fuel pump",
           "what_happens": "Mostly 2010 and early to mid 2011 cars. No extended warranty on this engine.",
           "typical_miles": null,
           "shop_cost_usd": null,
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": null
         }
       ],
       "also_reported": [
@@ -285,7 +304,8 @@
             7500
           ],
           "severity": "critical",
-          "note": "Class action covered 2012-2015 model years. BMW extended chain coverage to 7 yr / 70k, with partial help to 8 yr / 100k. That coverage has expired on age for these cars, so ask for proof the chain was replaced. Cost range is the settlement's caps: $3,000 for the chain job, $7,500 for a failed engine."
+          "note": "Class action covered 2012-2015 model years. BMW extended chain coverage to 7 yr / 70k, with partial help to 8 yr / 100k. That coverage has expired on age for these cars, so ask for proof the chain was replaced. Cost range is the settlement's caps: $3,000 for the chain job, $7,500 for a failed engine.",
+          "due_from_miles": null
         }
       ],
       "also_reported": [
@@ -321,7 +341,8 @@
           "what_happens": "Housing cracks and can dump coolant within minutes, causing overheating.",
           "typical_miles": "70,000 to 100,000",
           "shop_cost_usd": null,
-          "severity": "high"
+          "severity": "high",
+          "due_from_miles": 70000
         },
         {
           "name": "Valve cover gasket",
@@ -329,7 +350,8 @@
           "typical_miles": "80,000 to 100,000",
           "shop_cost_usd": null,
           "severity": "medium",
-          "note": "Pricey because injectors must come out."
+          "note": "Pricey because injectors must come out.",
+          "due_from_miles": 80000
         },
         {
           "name": "Cylinder head coolant vent line",
@@ -340,7 +362,8 @@
             0
           ],
           "severity": "medium",
-          "note": "BMW fixes this free as a service action. Ask a dealer to check the VIN."
+          "note": "BMW fixes this free as a service action. Ask a dealer to check the VIN.",
+          "due_from_miles": null
         }
       ]
     },
@@ -368,7 +391,8 @@
           "what_happens": "Low coolant warnings, often from the water pump or a leaky cap. Small top-ups can be normal.",
           "typical_miles": "water pump 75,000 to 100,000",
           "shop_cost_usd": null,
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": 75000
         },
         {
           "name": "Valve cover gasket and PCV",
@@ -378,21 +402,24 @@
             500,
             1000
           ],
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": 70000
         },
         {
           "name": "VANOS solenoids",
           "what_happens": "Hesitation, rough idle, limp mode.",
           "typical_miles": "80,000 to 100,000",
           "shop_cost_usd": null,
-          "severity": "low"
+          "severity": "low",
+          "due_from_miles": 80000
         },
         {
           "name": "Oil filter breaking apart",
           "what_happens": "Filter element shears and leaves a piece in the housing. Usually not serious.",
           "typical_miles": null,
           "shop_cost_usd": null,
-          "severity": "low"
+          "severity": "low",
+          "due_from_miles": null
         }
       ]
     },
@@ -420,7 +447,8 @@
             3000
           ],
           "severity": "high",
-          "note": "Independent shop with the special tool. Used to be $5,000 to $10,000."
+          "note": "Independent shop with the special tool. Used to be $5,000 to $10,000.",
+          "due_from_miles": null
         },
         {
           "name": "Coolant transfer pipe",
@@ -431,7 +459,8 @@
             2500
           ],
           "severity": "high",
-          "note": "$4,000+ if done the factory way."
+          "note": "$4,000+ if done the factory way.",
+          "due_from_miles": null
         },
         {
           "name": "Alternator bracket gasket",
@@ -441,7 +470,8 @@
             1000,
             1500
           ],
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": null
         },
         {
           "name": "Valve cover gaskets",
@@ -451,7 +481,8 @@
             700,
             1000
           ],
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": null
         }
       ]
     },
@@ -477,7 +508,8 @@
           "typical_miles": null,
           "shop_cost_usd": null,
           "severity": "critical",
-          "note": "Seal job requires dropping the engine."
+          "note": "Seal job requires dropping the engine.",
+          "due_from_miles": null
         },
         {
           "name": "Timing chain stretch",
@@ -488,7 +520,8 @@
             15000
           ],
           "severity": "critical",
-          "note": "Can exceed $15,000 per source."
+          "note": "Can exceed $15,000 per source.",
+          "due_from_miles": null
         },
         {
           "name": "Fuel injectors",
@@ -496,14 +529,16 @@
           "typical_miles": null,
           "shop_cost_usd": null,
           "severity": "high",
-          "note": "$200 to $300 per injector, eight of them, plus labor."
+          "note": "$200 to $300 per injector, eight of them, plus labor.",
+          "due_from_miles": null
         },
         {
           "name": "Battery drain",
           "what_happens": "Batteries wear out fast. BMW calls for a new one every other oil change.",
           "typical_miles": null,
           "shop_cost_usd": null,
-          "severity": "low"
+          "severity": "low",
+          "due_from_miles": null
         }
       ],
       "buyer_note": "Ask whether BMW's Customer Care Package work (2014-2015) was done and get it in writing from a dealer by VIN. Source advises 2016 or newer."
@@ -527,28 +562,32 @@
           "typical_miles": "40,000 to 80,000",
           "shop_cost_usd": null,
           "severity": "critical",
-          "note": "Source recommends preventive replacement at 40,000 to 50,000 miles. Cost not in source, needs a shop quote."
+          "note": "Source recommends preventive replacement at 40,000 to 50,000 miles. Cost not in source, needs a shop quote.",
+          "due_from_miles": 40000
         },
         {
           "name": "Throttle actuators",
           "what_happens": "Check engine light, limp mode. Two actuators, labor heavy.",
           "typical_miles": "60,000 to 100,000",
           "shop_cost_usd": null,
-          "severity": "high"
+          "severity": "high",
+          "due_from_miles": 60000
         },
         {
           "name": "VANOS solenoids and seals",
           "what_happens": "Rough idle, lost low-end torque.",
           "typical_miles": "60,000 to 90,000",
           "shop_cost_usd": null,
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": 60000
         },
         {
           "name": "Oil consumption",
           "what_happens": "Uses oil between changes.",
           "typical_miles": "50,000+",
           "shop_cost_usd": null,
-          "severity": "low"
+          "severity": "low",
+          "due_from_miles": 50000
         }
       ]
     },
@@ -571,14 +610,16 @@
           "typical_miles": null,
           "shop_cost_usd": null,
           "severity": "high",
-          "note": "More of a concern on tuned cars. Ask if the car has been tuned."
+          "note": "More of a concern on tuned cars. Ask if the car has been tuned.",
+          "due_from_miles": null
         },
         {
           "name": "Valve cover and gasket",
           "what_happens": "Burning oil smell, oil on plugs.",
           "typical_miles": "80,000 to 100,000+",
           "shop_cost_usd": null,
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": 80000
         },
         {
           "name": "Oil pan gasket",
@@ -589,14 +630,16 @@
             4500
           ],
           "severity": "medium",
-          "note": "One reader reported a $4,500 dealer quote."
+          "note": "One reader reported a $4,500 dealer quote.",
+          "due_from_miles": null
         },
         {
           "name": "Oil filter housing gasket",
           "what_happens": "Oil leak onto the belt.",
           "typical_miles": "80,000 to 100,000+",
           "shop_cost_usd": null,
-          "severity": "medium"
+          "severity": "medium",
+          "due_from_miles": 80000
         }
       ]
     }

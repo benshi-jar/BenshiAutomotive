@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Check a used BMW | Walkaround</title>
+<meta name="description" content="Free used BMW checker. Enter the VIN or year and model, the mileage and the asking price to see what is due, open recalls, an opening offer and what to say to the seller.">
+<link rel="canonical" href="https://benshiautomotive.vercel.app/check">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><b></b><b></b><b></b></div>
+
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <a class="brand" href="/">walk<span class="grad-text">around</span></a>
+      <nav aria-label="Sections">
+        <a href="/check" aria-current="page">Check a car</a>
+        <a href="/engines">Engine guides</a>
+        <a href="/#faq">FAQ</a>
+      </nav>
+      <a class="btn small" href="#feedback">Give feedback</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="guide">
+  <div class="wrap">
+    <span class="eyebrow"><i></i>Free while in beta. No account needed.</span>
+    <h1>Check a used BMW <span class="grad-text">before you negotiate</span></h1>
+    <p class="sub">Enter the VIN, or just the year and model. Add the mileage and asking price to get what is due on this car, open recalls, an opening offer, and the words to use with the seller.</p>
+
+    <form class="card car-form" id="car-form" novalidate>
+      <div class="field wide">
+        <label for="f-vin">VIN <span class="opt">optional</span></label>
+        <div class="vin-row">
+          <input id="f-vin" name="vin" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="17" placeholder="17 characters, on the listing or windshield">
+          <button class="btn small ghost" type="button" id="vin-btn">Look up</button>
+        </div>
+        <p class="status" id="vin-status" role="status"></p>
+      </div>
+      <div class="field">
+        <label for="f-year">Year</label>
+        <input id="f-year" name="year" type="number" inputmode="numeric" min="1999" max="2026" placeholder="2013">
+      </div>
+      <div class="field">
+        <label for="f-model">Model</label>
+        <input id="f-model" name="model" type="text" list="model-list" autocomplete="off" placeholder="335i, X5 35i, M3">
+        <datalist id="model-list"></datalist>
+      </div>
+      <div class="field">
+        <label for="f-miles">Mileage</label>
+        <input id="f-miles" name="miles" type="text" inputmode="numeric" placeholder="94,000">
+      </div>
+      <div class="field">
+        <label for="f-price">Asking price</label>
+        <input id="f-price" name="price" type="text" inputmode="numeric" placeholder="$13,500">
+      </div>
+      <div class="field wide" id="engine-row" hidden>
+        <label for="f-engine">Engine</label>
+        <select id="f-engine" name="engine"></select>
+        <p class="fine" id="engine-hint"></p>
+      </div>
+      <div class="field wide actions">
+        <button class="btn" type="submit">Build my report</button>
+        <p class="status" id="form-status" role="status"></p>
+      </div>
+    </form>
+
+    <div id="report" class="report-wrap" hidden aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="feedback">
+  <div class="wrap">
+    <div class="card cta">
+      <h2>Did this help? <span class="grad-text">Tell us</span></h2>
+      <p class="sub">Walkaround is new and built by one person. Tell us what was useful, what was wrong, or which car you want covered next. Leave your email if you want to hear when we add more makes.</p>
+      <form class="feedback" id="join-form" action="https://formspree.io/f/myeweqok" method="POST">
+        <label class="sr-only" for="fb-text">Your feedback</label>
+        <textarea id="fb-text" name="feedback" rows="3" placeholder="It helped me knock $800 off. It got the engine wrong for my car. Please add Audi."></textarea>
+        <div class="join">
+          <input id="join-email" name="email" type="email" aria-label="Email address, optional" placeholder="you@example.com (optional)" autocomplete="email">
+          <button class="btn" type="submit">Send</button>
+        </div>
+        <input class="trap" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="source" value="checker-feedback">
+      </form>
+      <p class="status" id="join-status" role="status"></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="fine">Walkaround is independent and is not affiliated with, sponsored by, or endorsed by BMW AG. VIN details and recalls come from NHTSA, the US government safety agency. Repair information comes from the sources linked in each engine guide. This is general information and does not replace an inspection by a qualified mechanic.</p>
+  </div>
+</footer>
+
+<script src="/site.js" defer></script>
+<script src="/checker.js" defer></script>
+</body>
+</html>
