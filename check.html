@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Check a used BMW | Walkaround</title>
-<meta name="description" content="Free used BMW checker. Enter the VIN or year and model, the mileage and the asking price to see what is due, open recalls, an opening offer and what to say to the seller.">
+<meta name="description" content="Free used BMW checker. Paste the listing or enter the VIN or year and model, the mileage and the asking price to see what is due, open recalls, an opening offer and what to say to the seller.">
 <link rel="canonical" href="https://benshiautomotive.vercel.app/check">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/styles.css">
@@ -31,9 +31,16 @@
   <div class="wrap">
     <span class="eyebrow"><i></i>Free while in beta. No account needed.</span>
     <h1>Check a used BMW <span class="grad-text">before you negotiate</span></h1>
-    <p class="sub">Enter the VIN, or just the year and model. Add the mileage and asking price to get what is due on this car, open recalls, an opening offer, and the words to use with the seller.</p>
+    <p class="sub">Paste the listing, or enter the VIN or just the year and model. Add the mileage and asking price to get what is due on this car, open recalls, an opening offer, and the words to use with the seller.</p>
 
     <form class="card car-form" id="car-form" novalidate>
+      <div class="field wide">
+        <label for="f-paste">Paste the whole listing <span class="opt">fastest</span></label>
+        <textarea id="f-paste" rows="3" autocomplete="off" spellcheck="false" placeholder="Copy all the text on the listing page and paste it here. We pick out the VIN, mileage, price, year and model."></textarea>
+        <p class="fine">On a computer, press Ctrl+A then Ctrl+C on the listing (Cmd on a Mac). On a phone, press and hold the listing text and drag to select it. The text stays in your browser and is not saved.</p>
+        <p class="status" id="paste-status" role="status"></p>
+      </div>
+      <div class="or-line" aria-hidden="true"><span>or fill it in yourself</span></div>
       <div class="field wide">
         <label for="f-vin">VIN <span class="opt">optional</span></label>
         <div class="vin-row">
@@ -102,6 +109,7 @@
 </footer>
 
 <script src="/site.js" defer></script>
+<script src="/listing-parse.js" defer></script>
 <script src="/checker.js" defer></script>
 </body>
 </html>
