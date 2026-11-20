@@ -253,9 +253,12 @@ footer .wrap { padding-block: 20px 44px; }
 .field.wide { grid-column: 1 / -1; }
 .field label { font-weight: 700; font-size: 0.92rem; }
 .field .opt { font-weight: 500; color: var(--muted); font-size: 0.8rem; }
-.field input, .field select, .feedback textarea { font: inherit; font-size: 1rem; color: var(--ink); background: var(--glass-strong); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; min-width: 0; width: 100%; transition: border-color 0.25s, box-shadow 0.25s; }
-.field input:focus, .field select:focus, .feedback textarea:focus { outline: none; border-color: var(--sky); box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 25%, transparent); }
+.field input, .field select, .field textarea, .feedback textarea { font: inherit; font-size: 1rem; color: var(--ink); background: var(--glass-strong); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; min-width: 0; width: 100%; transition: border-color 0.25s, box-shadow 0.25s; }
+.field input:focus, .field select:focus, .field textarea:focus, .feedback textarea:focus { outline: none; border-color: var(--sky); box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 25%, transparent); }
 .field select option { color: #0c1530; }
+.field textarea { resize: vertical; min-height: 84px; }
+.or-line { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 0.85rem; }
+.or-line::before, .or-line::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .vin-row { display: flex; gap: 8px; }
 .vin-row input { flex: 1 1 auto; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.04em; }
 .btn.ghost { background: var(--glass-strong); color: var(--ink); border: 1px solid var(--line); box-shadow: none; }

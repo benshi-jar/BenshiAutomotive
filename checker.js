@@ -436,6 +436,63 @@
     report.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  // Paste the whole listing: pick out what we can, fill the form, and build the
+  // report straight away when there is enough to go on.
+  var pasteBox = el('f-paste');
+  var pasteStatus = el('paste-status');
+  var pasteTimer = null;
+
+  function listJoin(parts) {
+    if (parts.length < 2) return parts.join('');
+    return parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
+  }
+
+  function applyPaste() {
+    var text = pasteBox.value.trim();
+    if (!text || !ENGINES || !window.WalkaroundParse) return;
+    if (/^https?:\/\/\S+$/i.test(text)) {
+      pasteStatus.textContent = 'That is a link. We cannot open listing sites for you, so open the listing and copy the text on the page instead.';
+      pasteStatus.className = 'status error';
+      return;
+    }
+    var got = window.WalkaroundParse.parseListing(text);
+    var found = [];
+    if (got.vin) found.push('the VIN');
+    if (got.year && got.model) found.push('a ' + got.year + ' ' + got.model);
+    if (got.miles != null) found.push(miles(got.miles) + ' miles');
+    if (got.price) found.push(money(got.price) + ' asking');
+    if (!found.length) {
+      pasteStatus.textContent = 'We could not find a VIN, mileage or price in that text. Try copying more of the page, or fill it in below.';
+      pasteStatus.className = 'status error';
+      return;
+    }
+    // A paste is a new car, so start clean.
+    state.decoded = null;
+    vinInput.value = got.vin || '';
+    vinStatus.textContent = '';
+    if (got.year) yearInput.value = got.year;
+    if (got.model) modelInput.value = got.model;
+    milesInput.value = got.miles != null ? miles(got.miles) : '';
+    priceInput.value = got.price ? money(got.price) : '';
+    var missing = [];
+    if (!got.vin && !(got.year && got.model)) missing.push('the year and model');
+    if (got.miles == null) missing.push('the mileage');
+    if (!got.price) missing.push('the asking price');
+    pasteStatus.textContent = 'Found ' + listJoin(found) + '. Check them below' +
+      (missing.length ? ' and add ' + listJoin(missing) : '') + '.';
+    pasteStatus.className = 'status';
+    var ready = got.vin ? decodeVin() : Promise.resolve();
+    ready.then(function () {
+      resolveEngine();
+      if (engineSelect.value && (milesInput.value || priceInput.value)) build();
+    });
+  }
+
+  pasteBox.addEventListener('input', function () {
+    clearTimeout(pasteTimer);
+    pasteTimer = setTimeout(applyPaste, 350);
+  });
+
   el('vin-btn').addEventListener('click', function () { decodeVin(); });
   vinInput.addEventListener('input', function () {
     if (state.decoded && vinInput.value.trim().toUpperCase() !== state.decoded.vin) state.decoded = null;
