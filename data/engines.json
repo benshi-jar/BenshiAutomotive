@@ -8,7 +8,8 @@
     "us_models": "Listed from general knowledge, not from the cited source. Verify before launch.",
     "due_from_miles": "Lowest mileage at which the source says the problem typically appears, as a number. Null when the source gave no mileage, meaning it can happen at any point.",
     "liters": "Engine size in liters and cylinder count, used to match the engine to the size a VIN decodes to.",
-    "also_codes": "Closely related engine codes (usually low-emissions versions sold in some US states) treated as the same engine."
+    "also_codes": "Closely related engine codes (usually low-emissions versions sold in some US states) treated as the same engine.",
+    "count_by_default": "false when a problem is cosmetic or optional, so it is listed but not taken off the offer unless the buyer ticks it."
   },
   "known_gaps": [
     "Many cost fields are empty and need real shop quotes",
@@ -92,7 +93,8 @@
           ],
           "severity": "low",
           "note": "Permanent fix is a revised cylinder head, $3k+. Most owners live with it.",
-          "due_from_miles": 50000
+          "due_from_miles": 50000,
+          "count_by_default": false
         },
         {
           "name": "Thermostat",

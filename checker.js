@@ -23,7 +23,10 @@
   var RULES = null;
   var state = { decoded: null, recalls: null, recallsKey: '', countKey: '', market: null };
 
-  var SOON_WINDOW = 15000;
+  // The report math lives in report-core.js so the site, the /api/report
+  // function and the Chrome extension all agree.
+  var C = window.WalkaroundCore;
+  var money = C.money, miles = C.miles, costText = C.costText, lowerName = C.lowerName, lowCost = C.lowCost;
 
   function esc(text) {
     return String(text == null ? '' : text).replace(/[&<>"']/g, function (c) {
@@ -34,109 +37,7 @@
     var n = parseInt(String(value || '').replace(/[^0-9]/g, ''), 10);
     return isNaN(n) ? null : n;
   }
-  function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
-  function miles(n) { return Math.round(n).toLocaleString('en-US'); }
-  function costText(cost) {
-    if (!cost) return 'No price yet';
-    var lo = cost[0], hi = cost[1];
-    if (lo === 0 && hi === 0) return 'Free at a dealer';
-    if (lo && hi) return money(lo) + ' to ' + money(hi);
-    if (lo) return money(lo) + ' and up';
-    return 'up to ' + money(hi);
-  }
-  // Lowercase a problem name for use mid-sentence, but keep acronyms like PCV,
-  // HPFP or VANOS in capitals.
-  function lowerName(name) {
-    return String(name).split(' ').map(function (w) {
-      return /^[A-Z0-9]{2,}s?$/.test(w) ? w : w.toLowerCase();
-    }).join(' ');
-  }
-  function lowCost(cost) {
-    if (!cost) return null;
-    if (cost[0] === 0 && cost[1] === 0) return 0;
-    return cost[0] || null;
-  }
-
-  function normalize(text) {
-    var t = String(text || '').toLowerCase().replace(/\bbmw\b/g, '');
-    t = t.replace(/x?drive|s?drive/g, '').replace(/gran coupe|gran turismo|coupe|convertible|sedan|wagon|series/g, '');
-    t = t.replace(/[^a-z0-9]/g, '');
-    t = t.replace(/^(\d{3})xi$/, '$1i');
-    return t;
-  }
-
-  function findEngines(year, candidates) {
-    var seen = {};
-    var matches = [];
-    candidates.forEach(function (c) {
-      var key = normalize(c);
-      if (!key) return;
-      RULES.forEach(function (r) {
-        if (r.model === key && year >= r.from_year && year <= r.to_year) {
-          var id = r.engine + '|' + (r.note || '');
-          if (!seen[id]) { seen[id] = true; matches.push(r); }
-        }
-      });
-    });
-    return matches;
-  }
-
-  function engineByCode(code) {
-    for (var i = 0; i < ENGINES.engines.length; i++) {
-      var e = ENGINES.engines[i];
-      if (e.code === code || (e.also_codes && e.also_codes.indexOf(code) !== -1)) return e;
-    }
-    return null;
-  }
-
-  // The VIN service reports engine codes like "N20B20" or "B58B30M1". The first
-  // three characters are the family we track.
-  function engineFromVin(text) {
-    var m = String(text || '').toUpperCase().match(/([NBS]\d{2})/);
-    var e = m && engineByCode(m[1]);
-    return e ? e.code : null;
-  }
-
-  // Engine size and cylinder count from the decoded VIN, if it gave them.
-  function vinSpec() {
-    var d = state.decoded;
-    if (!d) return null;
-    var liters = parseFloat(d.displacement);
-    var cylinders = parseInt(d.cylinders, 10);
-    liters = isNaN(liters) || liters <= 0 ? null : Math.round(liters * 10) / 10;
-    cylinders = isNaN(cylinders) || cylinders <= 0 ? null : cylinders;
-    return (liters || cylinders) ? { liters: liters, cylinders: cylinders } : null;
-  }
-
-  function fitsSpec(code, spec) {
-    var e = engineByCode(code);
-    if (!e || !spec || !e.cylinders) return true;
-    if (spec.cylinders && spec.cylinders !== e.cylinders) return false;
-    if (spec.liters && !e.liters.some(function (l) { return Math.abs(l - spec.liters) < 0.15; })) return false;
-    return true;
-  }
-
-  function specText(spec) {
-    var shape = { 4: 'four-cylinder', 6: 'six-cylinder', 8: 'V8' };
-    return [spec.liters ? spec.liters.toFixed(1) + 'L' : '',
-      spec.cylinders ? (shape[spec.cylinders] || spec.cylinders + '-cylinder') : ''].filter(Boolean).join(' ');
-  }
-
-  function orList(codes) {
-    if (codes.length < 2) return codes.join('');
-    return codes.slice(0, -1).join(', ') + ' or ' + codes[codes.length - 1];
-  }
-
-  function recallModel(modelText) {
-    var key = normalize(modelText);
-    var m = key.match(/^([xz][1-7])/);
-    if (m) return m[1].toUpperCase();
-    m = key.match(/^(m[2-8])(?!\d)/);
-    if (m) return m[1].toUpperCase();
-    m = key.match(/^m?(\d{3}[a-z]*)/);
-    if (m) return m[0];
-    return modelText;
-  }
+  function engineByCode(code) { return C.engineByCode(ENGINES, code); }
 
   function fillEngineSelect(selected) {
     var options = ['<option value="">Pick the engine</option>'];
@@ -148,59 +49,10 @@
   }
 
   function resolveEngine() {
-    var year = num(yearInput.value);
-    var model = modelInput.value.trim();
     engineRow.hidden = false;
-    if (!year || !model) {
-      fillEngineSelect('');
-      engineHint.textContent = 'Enter the year and model and we will match the engine.';
-      return;
-    }
-    var words = model.split(/\s+/);
-    var candidates = [model].concat(words);
-    for (var w = 0; w < words.length - 1; w++) candidates.push(words[w] + ' ' + words[w + 1]);
-    if (state.decoded) {
-      var d = state.decoded;
-      candidates.push(d.trim, d.series, d.model + ' ' + d.trim, d.model + ' ' + d.series);
-    }
-    var matches = findEngines(year, candidates);
-    var spec = vinSpec();
-    var fit = matches.filter(function (r) { return fitsSpec(r.engine, spec); });
-    var vinCode = state.decoded && engineFromVin(state.decoded.engineModel);
-
-    if (vinCode) {
-      fillEngineSelect(vinCode);
-      engineHint.textContent = 'From the VIN. Change it if the listing says otherwise.';
-    } else if (matches.length > 1 && fit.length === 1) {
-      fillEngineSelect(fit[0].engine);
-      engineHint.textContent = 'This model had more than one engine that year. The VIN lists a ' + specText(spec) +
-        ', which is the ' + fit[0].engine + (fit[0].note ? ' (' + fit[0].note + ')' : '') + '.';
-    } else if (matches.length === 1 && fit.length === 1) {
-      fillEngineSelect(matches[0].engine);
-      engineHint.textContent = spec ?
-        'Matched from the year and model, and the ' + specText(spec) + ' on the VIN agrees. Change it if the listing says otherwise.' :
-        'Matched from the year and model. Check the listing or under the hood, and change it if it is wrong.';
-    } else if (matches.length >= 1 && spec && !fit.length) {
-      // Our table and the VIN disagree. Trust neither blindly: ask.
-      fillEngineSelect('');
-      var sized = ENGINES.engines.filter(function (e) {
-        var span = String(e.years || '').match(/(\d{4})\D+(\d{4})/);
-        return fitsSpec(e.code, spec) && (!span || (year >= +span[1] && year <= +span[2]));
-      }).map(function (e) { return e.code; });
-      engineHint.textContent = 'Our table says the ' + year + ' ' + model + ' has the ' + orList(matches.map(function (r) { return r.engine; })) +
-        ', but the VIN lists a ' + specText(spec) + '. Check the listing and pick the engine' +
-        (sized.length ? ' (probably the ' + orList(sized) + ')' : '') + '.';
-    } else if (matches.length > 1) {
-      fillEngineSelect('');
-      var options = fit.length ? fit : matches;
-      engineHint.textContent = 'This model had more than one engine that year: ' + options.map(function (r) {
-        return r.engine + (r.note ? ' (' + r.note + ')' : '');
-      }).join(' or ') + '. Pick the one in this car. The listing or the sticker under the hood will say.';
-    } else {
-      fillEngineSelect('');
-      engineHint.textContent = 'We have not matched this model yet' + (spec ? ' (the VIN lists a ' + specText(spec) + ')' : '') +
-        '. If the listing names one of the engines here, pick it. If not, we do not cover this car yet.';
-    }
+    var match = C.matchEngine(ENGINES, RULES, num(yearInput.value), modelInput.value.trim(), state.decoded);
+    fillEngineSelect(match.code);
+    engineHint.textContent = match.hint;
   }
 
   function decodeVin() {
@@ -244,35 +96,10 @@
     if (state.recallsKey === key && state.recalls) return Promise.resolve(state.recalls);
     state.recallsKey = key;
     state.recalls = null;
-    return fetch('/api/recalls?model=' + encodeURIComponent(recallModel(model)) + '&year=' + year)
+    return fetch('/api/recalls?model=' + encodeURIComponent(C.recallModel(model)) + '&year=' + year)
       .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
       .then(function (b) { state.recalls = b; return b; })
       .catch(function () { state.recalls = { error: true, recalls: [] }; return state.recalls; });
-  }
-
-  function classify(engine, mileage) {
-    return engine.problems.map(function (p, i) {
-      var from = p.due_from_miles;
-      var status = 'watch';
-      if (from != null && mileage != null) {
-        if (mileage >= from) status = 'due';
-        else if (mileage >= from - SOON_WINDOW) status = 'soon';
-        else status = 'later';
-      }
-      return { index: i, p: p, status: status };
-    });
-  }
-
-  function verdictFor(items, counted, asking) {
-    var critical = items.filter(function (it) { return counted[it.index] && it.p.severity === 'critical'; });
-    var total = 0;
-    items.forEach(function (it) { if (counted[it.index]) total += lowCost(it.p.shop_cost_usd) || 0; });
-    if (critical.length) return { label: 'Get proof or walk', cls: 'bad', text: 'This engine has a known failure that can cost as much as the car is worth. Only buy with written proof that ' + critical.map(function (c) { return lowerName(c.p.name); }).join(' and ') + ' has been dealt with.' };
-    if (asking && total > asking * 0.15) return { label: 'Negotiate hard', cls: 'bad', text: 'The work this car is due for adds up to more than 15% of the asking price. Do not pay full price without receipts.' };
-    if (total > 0) return { label: 'Negotiate', cls: 'mid', text: 'Fair if the seller has receipts for the items below. If not, the price should come down by what that work costs.' };
-    var unpricedDue = items.filter(function (it) { return counted[it.index] && lowCost(it.p.shop_cost_usd) === null; });
-    if (unpricedDue.length) return { label: 'Ask for receipts', cls: 'mid', text: 'Known items are due at this mileage, but our sources give no price for them. Ask for receipts, and get a shop quote before you settle on an offer.' };
-    return { label: 'Fair if it checks out', cls: 'live', text: 'Nothing with a known price is due at this mileage. Still get an independent inspection before you pay.' };
   }
 
   // NHTSA sends dates as day/month/year. Write them out so US readers do not
@@ -306,7 +133,7 @@
     var engine = engineByCode(engineSelect.value);
     if (!engine) { report.hidden = true; return; }
 
-    var items = classify(engine, mileage);
+    var items = C.classify(engine, mileage);
     var counted = {};
     // Checkboxes on screen belong to the last report. Only keep the buyer's
     // ticks if that report was for the same engine and mileage.
@@ -315,17 +142,13 @@
     state.countKey = countKey;
     items.forEach(function (it) {
       var box = keepTicks ? document.getElementById('count-' + it.index) : null;
-      counted[it.index] = box ? box.checked : it.status === 'due' && it.p.severity !== 'low' || (it.status === 'due' && lowCost(it.p.shop_cost_usd) !== null);
+      counted[it.index] = box ? box.checked : C.defaultCounted(it);
     });
 
-    var total = 0, unpriced = [];
-    items.forEach(function (it) {
-      if (!counted[it.index]) return;
-      var lc = lowCost(it.p.shop_cost_usd);
-      if (lc === null) unpriced.push(it.p.name); else total += lc;
-    });
-    var offer = asking ? Math.max(0, Math.floor((asking - total) / 100) * 100) : null;
-    var verdict = verdictFor(items, counted, asking);
+    var sums = C.totals(items, counted);
+    var total = sums.total, unpriced = sums.unpriced;
+    var offer = C.offerFor(asking, total);
+    var verdict = C.verdictFor(items, counted, asking);
     var carName = [year, 'BMW', model].filter(Boolean).join(' ');
 
     var groups = [
@@ -354,7 +177,9 @@
     var recalls = state.recalls;
     var recallNames = (recalls && recalls.recalls || []).map(function (r) { return r.component.toLowerCase(); });
 
+    var anyMileage = C.criticalAnyMileage(items, counted).map(function (it) { return lowerName(it.p.name); });
     var message = 'Hi, I\'m interested in your ' + carName + '. Before I come to see it, a few questions:\n' +
+      (anyMileage.length ? '- Has anything been done about the ' + anyMileage.join(' or the ') + '? Do you have paperwork? It is a known weak point on the ' + engine.code + '.\n' : '') +
       (dueNames.length ? '- Do you have receipts for the ' + dueNames.join(', ') + '? These are known service items on the ' + engine.code + ' engine' + (mileage ? ' around this mileage' : '') + '.\n' : '') +
       '- How often was the oil changed, and do you have records?\n' +
       (recallNames.length ? '- Have the open recalls been done at a dealer?\n' : '') +
@@ -366,6 +191,9 @@
       var when = p.due_from_miles && mileage ? 'it usually shows up around ' + miles(p.due_from_miles) + ' miles and this car has ' + miles(mileage) : 'it is a known issue on this engine';
       return 'The ' + engine.code + ' is known for ' + lowerName(p.name) + ', and ' + when + '. Without a receipt I have to budget ' +
         (lc ? 'at least ' + money(lc) : 'for it') + '.';
+    });
+    anyMileage.forEach(function (name) {
+      points.unshift('The ' + engine.code + ' is known for ' + name + ' at any mileage. Without paperwork showing it was done, I am pricing in the risk of a big repair.');
     });
     if (!points.length) points.push('Nothing on this engine is due at this mileage, so focus on the service history and the inspection.');
     var market = state.market && asking && state.market.price === asking ? state.market : null;
