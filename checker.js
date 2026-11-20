@@ -51,7 +51,7 @@
   }
 
   function normalize(text) {
-    var t = String(text || '').toLowerCase();
+    var t = String(text || '').toLowerCase().replace(/\bbmw\b/g, '');
     t = t.replace(/x?drive|s?drive/g, '').replace(/gran coupe|gran turismo|coupe|convertible|sedan|wagon|series/g, '');
     t = t.replace(/[^a-z0-9]/g, '');
     t = t.replace(/^(\d{3})xi$/, '$1i');
@@ -76,9 +76,48 @@
 
   function engineByCode(code) {
     for (var i = 0; i < ENGINES.engines.length; i++) {
-      if (ENGINES.engines[i].code === code) return ENGINES.engines[i];
+      var e = ENGINES.engines[i];
+      if (e.code === code || (e.also_codes && e.also_codes.indexOf(code) !== -1)) return e;
     }
     return null;
+  }
+
+  // The VIN service reports engine codes like "N20B20" or "B58B30M1". The first
+  // three characters are the family we track.
+  function engineFromVin(text) {
+    var m = String(text || '').toUpperCase().match(/([NBS]\d{2})/);
+    var e = m && engineByCode(m[1]);
+    return e ? e.code : null;
+  }
+
+  // Engine size and cylinder count from the decoded VIN, if it gave them.
+  function vinSpec() {
+    var d = state.decoded;
+    if (!d) return null;
+    var liters = parseFloat(d.displacement);
+    var cylinders = parseInt(d.cylinders, 10);
+    liters = isNaN(liters) || liters <= 0 ? null : Math.round(liters * 10) / 10;
+    cylinders = isNaN(cylinders) || cylinders <= 0 ? null : cylinders;
+    return (liters || cylinders) ? { liters: liters, cylinders: cylinders } : null;
+  }
+
+  function fitsSpec(code, spec) {
+    var e = engineByCode(code);
+    if (!e || !spec || !e.cylinders) return true;
+    if (spec.cylinders && spec.cylinders !== e.cylinders) return false;
+    if (spec.liters && !e.liters.some(function (l) { return Math.abs(l - spec.liters) < 0.15; })) return false;
+    return true;
+  }
+
+  function specText(spec) {
+    var shape = { 4: 'four-cylinder', 6: 'six-cylinder', 8: 'V8' };
+    return [spec.liters ? spec.liters.toFixed(1) + 'L' : '',
+      spec.cylinders ? (shape[spec.cylinders] || spec.cylinders + '-cylinder') : ''].filter(Boolean).join(' ');
+  }
+
+  function orList(codes) {
+    if (codes.length < 2) return codes.join('');
+    return codes.slice(0, -1).join(', ') + ' or ' + codes[codes.length - 1];
   }
 
   function recallModel(modelText) {
@@ -118,20 +157,42 @@
       candidates.push(d.trim, d.series, d.model + ' ' + d.trim, d.model + ' ' + d.series);
     }
     var matches = findEngines(year, candidates);
-    if (state.decoded && state.decoded.engineModel && engineByCode(state.decoded.engineModel.toUpperCase())) {
-      fillEngineSelect(state.decoded.engineModel.toUpperCase());
+    var spec = vinSpec();
+    var fit = matches.filter(function (r) { return fitsSpec(r.engine, spec); });
+    var vinCode = state.decoded && engineFromVin(state.decoded.engineModel);
+
+    if (vinCode) {
+      fillEngineSelect(vinCode);
       engineHint.textContent = 'From the VIN. Change it if the listing says otherwise.';
-    } else if (matches.length === 1) {
+    } else if (matches.length > 1 && fit.length === 1) {
+      fillEngineSelect(fit[0].engine);
+      engineHint.textContent = 'This model had more than one engine that year. The VIN lists a ' + specText(spec) +
+        ', which is the ' + fit[0].engine + (fit[0].note ? ' (' + fit[0].note + ')' : '') + '.';
+    } else if (matches.length === 1 && fit.length === 1) {
       fillEngineSelect(matches[0].engine);
-      engineHint.textContent = 'Matched from the year and model. Check the listing or under the hood, and change it if it is wrong.';
+      engineHint.textContent = spec ?
+        'Matched from the year and model, and the ' + specText(spec) + ' on the VIN agrees. Change it if the listing says otherwise.' :
+        'Matched from the year and model. Check the listing or under the hood, and change it if it is wrong.';
+    } else if (matches.length >= 1 && spec && !fit.length) {
+      // Our table and the VIN disagree. Trust neither blindly: ask.
+      fillEngineSelect('');
+      var sized = ENGINES.engines.filter(function (e) {
+        var span = String(e.years || '').match(/(\d{4})\D+(\d{4})/);
+        return fitsSpec(e.code, spec) && (!span || (year >= +span[1] && year <= +span[2]));
+      }).map(function (e) { return e.code; });
+      engineHint.textContent = 'Our table says the ' + year + ' ' + model + ' has the ' + orList(matches.map(function (r) { return r.engine; })) +
+        ', but the VIN lists a ' + specText(spec) + '. Check the listing and pick the engine' +
+        (sized.length ? ' (probably the ' + orList(sized) + ')' : '') + '.';
     } else if (matches.length > 1) {
       fillEngineSelect('');
-      engineHint.textContent = 'This model had two engines that year: ' + matches.map(function (r) {
+      var options = fit.length ? fit : matches;
+      engineHint.textContent = 'This model had more than one engine that year: ' + options.map(function (r) {
         return r.engine + (r.note ? ' (' + r.note + ')' : '');
-      }).join(' or ') + '. Pick the one in this car.';
+      }).join(' or ') + '. Pick the one in this car. The listing or the sticker under the hood will say.';
     } else {
       fillEngineSelect('');
-      engineHint.textContent = 'We have not matched this model yet. Pick the engine if you know it. We cover ten common engines so far.';
+      engineHint.textContent = 'We have not matched this model yet' + (spec ? ' (the VIN lists a ' + specText(spec) + ')' : '') +
+        '. If the listing names one of the engines here, pick it. If not, we do not cover this car yet.';
     }
   }
 
@@ -152,6 +213,7 @@
         var d = res.body;
         state.decoded = d;
         if (d.make && d.make.toUpperCase() !== 'BMW') {
+          state.decoded = { vin: d.vin, make: d.make };
           vinStatus.textContent = 'That VIN belongs to a ' + d.make + '. Walkaround only covers BMW so far.';
           vinStatus.className = 'status error';
           return;
@@ -375,6 +437,9 @@
   }
 
   el('vin-btn').addEventListener('click', function () { decodeVin(); });
+  vinInput.addEventListener('input', function () {
+    if (state.decoded && vinInput.value.trim().toUpperCase() !== state.decoded.vin) state.decoded = null;
+  });
   yearInput.addEventListener('change', function () { state.decoded = state.decoded && num(yearInput.value) === state.decoded.year ? state.decoded : null; resolveEngine(); });
   modelInput.addEventListener('change', resolveEngine);
   form.addEventListener('submit', function (e) {
