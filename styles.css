@@ -272,6 +272,11 @@ footer .wrap { padding-block: 20px 44px; }
 @media (max-width: 560px) { .pick-side { grid-column: 2; flex-direction: row; align-items: center; justify-content: space-between; } }
 .offer-box { display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 20px; background: var(--glass); border: 1px solid var(--line); }
 .math { color: var(--muted); font-size: 0.92rem; }
+.math.market { color: var(--ink); border-top: 1px solid var(--line); padding-top: 10px; }
+details.more { margin-top: 4px; font-size: 0.9rem; }
+details.more summary { cursor: pointer; color: var(--sky); font-weight: 600; width: fit-content; }
+details.more p { margin-top: 6px; }
+.what:has(details.more[open]) > p.short { display: none; }
 .copy-text { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: var(--body); font-size: 0.95rem; line-height: 1.55; padding: 16px 18px; border-radius: 18px; background: var(--glass); border: 1px solid var(--line); }
 .feedback { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 560px; }
 .feedback textarea { resize: vertical; }

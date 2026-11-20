@@ -21,7 +21,7 @@
 
   var ENGINES = null;
   var RULES = null;
-  var state = { decoded: null, recalls: null, recallsKey: '' };
+  var state = { decoded: null, recalls: null, recallsKey: '', countKey: '', market: null };
 
   var SOON_WINDOW = 15000;
 
@@ -43,6 +43,13 @@
     if (lo && hi) return money(lo) + ' to ' + money(hi);
     if (lo) return money(lo) + ' and up';
     return 'up to ' + money(hi);
+  }
+  // Lowercase a problem name for use mid-sentence, but keep acronyms like PCV,
+  // HPFP or VANOS in capitals.
+  function lowerName(name) {
+    return String(name).split(' ').map(function (w) {
+      return /^[A-Z0-9]{2,}s?$/.test(w) ? w : w.toLowerCase();
+    }).join(' ');
   }
   function lowCost(cost) {
     if (!cost) return null;
@@ -260,10 +267,35 @@
     var critical = items.filter(function (it) { return counted[it.index] && it.p.severity === 'critical'; });
     var total = 0;
     items.forEach(function (it) { if (counted[it.index]) total += lowCost(it.p.shop_cost_usd) || 0; });
-    if (critical.length) return { label: 'Get proof or walk', cls: 'bad', text: 'This engine has a known failure that can cost as much as the car is worth. Only buy with written proof that ' + critical.map(function (c) { return c.p.name.toLowerCase(); }).join(' and ') + ' has been dealt with.' };
+    if (critical.length) return { label: 'Get proof or walk', cls: 'bad', text: 'This engine has a known failure that can cost as much as the car is worth. Only buy with written proof that ' + critical.map(function (c) { return lowerName(c.p.name); }).join(' and ') + ' has been dealt with.' };
     if (asking && total > asking * 0.15) return { label: 'Negotiate hard', cls: 'bad', text: 'The work this car is due for adds up to more than 15% of the asking price. Do not pay full price without receipts.' };
     if (total > 0) return { label: 'Negotiate', cls: 'mid', text: 'Fair if the seller has receipts for the items below. If not, the price should come down by what that work costs.' };
+    var unpricedDue = items.filter(function (it) { return counted[it.index] && lowCost(it.p.shop_cost_usd) === null; });
+    if (unpricedDue.length) return { label: 'Ask for receipts', cls: 'mid', text: 'Known items are due at this mileage, but our sources give no price for them. Ask for receipts, and get a shop quote before you settle on an offer.' };
     return { label: 'Fair if it checks out', cls: 'live', text: 'Nothing with a known price is due at this mileage. Still get an independent inspection before you pay.' };
+  }
+
+  // NHTSA sends dates as day/month/year. Write them out so US readers do not
+  // read 12/07/2018 as December 7.
+  function recallDate(text) {
+    var m = String(text).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!m) return text;
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return months[+m[2] - 1] + ' ' + (+m[1]) + ', ' + m[3];
+  }
+
+  // "AIR BAGS:FRONTAL:DRIVER SIDE" reads better as "Air bags: frontal: driver side".
+  function recallTitle(text) {
+    var t = String(text || '').toLowerCase().replace(/:/g, ': ');
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+
+  function recallCheckLink() {
+    var vin = vinInput.value.trim().toUpperCase();
+    if (/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) {
+      return '<a href="https://www.nhtsa.gov/recalls?vymm=' + encodeURIComponent(vin) + '" target="_blank" rel="noopener">Check open recalls for this exact VIN on nhtsa.gov</a>.';
+    }
+    return 'Enter the VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a> to see which ones are still open on this exact car.';
   }
 
   function render() {
@@ -276,8 +308,13 @@
 
     var items = classify(engine, mileage);
     var counted = {};
+    // Checkboxes on screen belong to the last report. Only keep the buyer's
+    // ticks if that report was for the same engine and mileage.
+    var countKey = engine.code + '|' + mileage;
+    var keepTicks = state.countKey === countKey;
+    state.countKey = countKey;
     items.forEach(function (it) {
-      var box = document.getElementById('count-' + it.index);
+      var box = keepTicks ? document.getElementById('count-' + it.index) : null;
       counted[it.index] = box ? box.checked : it.status === 'due' && it.p.severity !== 'low' || (it.status === 'due' && lowCost(it.p.shop_cost_usd) !== null);
     });
 
@@ -313,7 +350,7 @@
         }).join('') + '</div></div>';
     }).join('');
 
-    var dueNames = items.filter(function (it) { return counted[it.index]; }).map(function (it) { return it.p.name.toLowerCase(); });
+    var dueNames = items.filter(function (it) { return counted[it.index]; }).map(function (it) { return lowerName(it.p.name); });
     var recalls = state.recalls;
     var recallNames = (recalls && recalls.recalls || []).map(function (r) { return r.component.toLowerCase(); });
 
@@ -327,10 +364,14 @@
       var p = it.p;
       var lc = lowCost(p.shop_cost_usd);
       var when = p.due_from_miles && mileage ? 'it usually shows up around ' + miles(p.due_from_miles) + ' miles and this car has ' + miles(mileage) : 'it is a known issue on this engine';
-      return 'The ' + engine.code + ' is known for ' + p.name.toLowerCase() + ', and ' + when + '. Without a receipt I have to budget ' +
+      return 'The ' + engine.code + ' is known for ' + lowerName(p.name) + ', and ' + when + '. Without a receipt I have to budget ' +
         (lc ? 'at least ' + money(lc) : 'for it') + '.';
     });
     if (!points.length) points.push('Nothing on this engine is due at this mileage, so focus on the service history and the inspection.');
+    var market = state.market && asking && state.market.price === asking ? state.market : null;
+    if (market && !market.below) {
+      points.push('The listing site itself says this price is ' + money(market.amount) + ' above market, so there is room to come down on that alone.');
+    }
 
     var pushback = [
       ['"It runs perfectly."', 'These parts usually fail without warning, which is why I\'m asking for receipts rather than how it drives.'],
@@ -342,19 +383,26 @@
     if (!recalls) {
       recallHtml = '<p class="fine">Checking recalls.</p>';
     } else if (recalls.error) {
-      recallHtml = '<p class="fine">We could not load recalls right now. Check the VIN at <a href="https://www.nhtsa.gov/recalls" rel="noopener">nhtsa.gov/recalls</a>.</p>';
+      recallHtml = '<p class="fine">We could not load recalls right now. ' + recallCheckLink() + '</p>';
     } else if (!recalls.recalls.length) {
-      recallHtml = '<p class="fine">No recalls on record for the ' + esc(year + ' ' + recalls.model) + '. Confirm with the VIN at <a href="https://www.nhtsa.gov/recalls" rel="noopener">nhtsa.gov/recalls</a>.</p>';
+      recallHtml = '<p class="fine">No recalls on record for the ' + esc(year + ' ' + recalls.model) + '. ' + recallCheckLink() + '</p>';
     } else {
       recallHtml = '<div class="items">' + recalls.recalls.map(function (r) {
-        return '<div class="item"><span class="dot red"></span><div class="what"><strong>' + esc(r.component) + '</strong><p>' + esc(r.summary) + '</p><div class="meta">NHTSA campaign ' + esc(r.campaign) + (r.date ? ', filed ' + esc(r.date) : '') + '</div></div><span class="cost">Free at a dealer</span></div>';
-      }).join('') + '</div><p class="fine">These cover some cars from this model year, not all. Enter the VIN at <a href="https://www.nhtsa.gov/recalls" rel="noopener">nhtsa.gov/recalls</a> to see which ones are still open on this exact car.</p>';
+        var summary = String(r.summary || '');
+        var body = summary.length > 260 ?
+          '<p class="short">' + esc(summary.slice(0, 240).replace(/\s+\S*$/, '')) + '&hellip;</p><details class="more"><summary>Read the full recall</summary><p>' + esc(summary) + '</p></details>' :
+          '<p>' + esc(summary) + '</p>';
+        return '<div class="item"><span class="dot red"></span><div class="what"><strong>' + esc(recallTitle(r.component)) + '</strong>' + body +
+          '<div class="meta">NHTSA campaign ' + esc(r.campaign) + (r.date ? ', filed ' + esc(recallDate(r.date)) : '') + '</div></div><span class="cost">Free at a dealer</span></div>';
+      }).join('') + '</div><p class="fine">These cover some cars from this model year, not all. ' + recallCheckLink() + '</p>';
     }
 
     var offerHtml;
     if (asking) {
       offerHtml = '<div class="offer-box"><div class="offer"><div class="was"><b>' + money(asking) + '</b>Asking</div><span class="arrow" aria-hidden="true">&rarr;</span><div><b class="grad-text">' + money(offer) + '</b>Your opening offer</div></div>' +
-        '<p class="math">' + money(asking) + ' asking minus at least ' + money(total) + ' of work due without receipts' + (unpriced.length ? ', plus ' + esc(unpriced.join(', ').toLowerCase()) + ' with no price in our data, so get a quote' : '') + '.</p></div>';
+        '<p class="math">' + money(asking) + ' asking minus at least ' + money(total) + ' of work due without receipts' + (unpriced.length ? ', plus ' + esc(unpriced.map(lowerName).join(', ')) + ' with no price in our data, so get a quote' : '') + '.</p>' +
+        (market ? '<p class="math market">The listing site says this price is ' + money(market.amount) + (market.below ? ' below market, so it is already priced well. Lean on the repair items, not the price.' : ' above market. Use that too: ask the seller to come down at least that much.') + '</p>' : '') +
+        '</div>';
     } else {
       offerHtml = '<p class="math">Add the asking price above to get an offer. Work due without receipts: at least ' + money(total) + '.</p>';
     }
@@ -468,6 +516,7 @@
     }
     // A paste is a new car, so start clean.
     state.decoded = null;
+    state.market = got.market && got.price ? { amount: got.market.amount, below: got.market.below, price: got.price } : null;
     vinInput.value = got.vin || '';
     vinStatus.textContent = '';
     if (got.year) yearInput.value = got.year;
@@ -495,7 +544,7 @@
 
   el('vin-btn').addEventListener('click', function () { decodeVin(); });
   vinInput.addEventListener('input', function () {
-    if (state.decoded && vinInput.value.trim().toUpperCase() !== state.decoded.vin) state.decoded = null;
+    if (state.decoded && vinInput.value.trim().toUpperCase() !== state.decoded.vin) { state.decoded = null; state.market = null; }
   });
   yearInput.addEventListener('change', function () { state.decoded = state.decoded && num(yearInput.value) === state.decoded.year ? state.decoded : null; resolveEngine(); });
   modelInput.addEventListener('change', resolveEngine);

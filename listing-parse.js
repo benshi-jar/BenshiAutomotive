@@ -101,6 +101,14 @@
     return { year: +m[1], model: model || null };
   }
 
+  // Sites like CarGurus and Cars.com say how the price compares to the market,
+  // for example "$872 below market". The first such phrase is the car's own.
+  function findMarket(text) {
+    var m = text.match(/\$\s?(\d{1,3}(?:,\d{3})+|\d{2,6})\s*(below|under|above|over)\s+(?:the\s+)?market/i);
+    if (!m) return null;
+    return { amount: toNumber(m[1]), below: /below|under/i.test(m[2]) };
+  }
+
   function parseListing(text) {
     text = String(text || '');
     var ym = findYearModel(text);
@@ -109,7 +117,8 @@
       miles: findMiles(text),
       price: findPrice(text),
       year: ym.year,
-      model: ym.model
+      model: ym.model,
+      market: findMarket(text)
     };
   }
 
