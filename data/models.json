@@ -1,5 +1,6 @@
 {
-  "about": "Which engine a US-market BMW has, by model and model year. Written from general knowledge and not yet checked against a reference. The checker always lets the buyer change the engine.",
+  "about": "Which engine a US-market BMW has, by model and model year. Written from general knowledge, then cross-checked against a reference (see checked). The checker always lets the buyer change the engine.",
+  "checked": "2026-11-20: cross-checked against the Applications lists on the Wikipedia pages for each engine (N52, N54, N55, N20, B48, B58, N62, N63) and the F01, F26 X4 and G05 X5 pages. Wikipedia mostly lists production years, which usually start a year before the US model year, so year starts here follow US model years. Not confirmed by that check: the F87 M2 (N55), F12/F13/F06 640i (N55), F22 M240i (B58) and the N20 28i models, whose rows were missing from the fetched pages.",
   "how_to_read": {
     "model": "Model name lowercased with spaces, dashes and xDrive/sDrive removed, so 'X5 xDrive35i' is 'x535i'.",
     "note": "Shown when two engines share a model and year, to help the buyer pick."
@@ -48,9 +49,17 @@
       "label": "228i"
     },
     {
+      "model": "228i",
+      "from_year": 2020,
+      "to_year": 2025,
+      "engine": "B48",
+      "note": "2 Series Gran Coupe",
+      "label": "228i"
+    },
+    {
       "model": "230i",
       "from_year": 2017,
-      "to_year": 2021,
+      "to_year": 2025,
       "engine": "B48",
       "label": "230i"
     },
@@ -62,23 +71,38 @@
       "label": "M235i"
     },
     {
+      "model": "m235i",
+      "from_year": 2020,
+      "to_year": 2024,
+      "engine": "B48",
+      "note": "2 Series Gran Coupe",
+      "label": "M235i"
+    },
+    {
       "model": "m240i",
       "from_year": 2017,
-      "to_year": 2021,
+      "to_year": 2025,
       "engine": "B58",
       "label": "M240i"
     },
     {
       "model": "320i",
       "from_year": 2012,
-      "to_year": 2018,
+      "to_year": 2016,
       "engine": "N20",
+      "label": "320i"
+    },
+    {
+      "model": "320i",
+      "from_year": 2017,
+      "to_year": 2019,
+      "engine": "B48",
       "label": "320i"
     },
     {
       "model": "325i",
       "from_year": 2006,
-      "to_year": 2006,
+      "to_year": 2007,
       "engine": "N52",
       "label": "325i"
     },
@@ -122,7 +146,7 @@
     {
       "model": "335i",
       "from_year": 2011,
-      "to_year": 2015,
+      "to_year": 2016,
       "engine": "N55",
       "label": "335i"
     },
@@ -215,6 +239,7 @@
       "from_year": 2008,
       "to_year": 2010,
       "engine": "N54",
+      "note": "sedan or wagon",
       "label": "535i"
     },
     {
@@ -222,6 +247,14 @@
       "from_year": 2011,
       "to_year": 2016,
       "engine": "N55",
+      "label": "535i"
+    },
+    {
+      "model": "535i",
+      "from_year": 2010,
+      "to_year": 2010,
+      "engine": "N55",
+      "note": "5 Series Gran Turismo",
       "label": "535i"
     },
     {
@@ -243,6 +276,7 @@
       "from_year": 2006,
       "to_year": 2010,
       "engine": "N62",
+      "note": "sedan or wagon",
       "label": "550i"
     },
     {
@@ -250,6 +284,14 @@
       "from_year": 2011,
       "to_year": 2016,
       "engine": "N63",
+      "label": "550i"
+    },
+    {
+      "model": "550i",
+      "from_year": 2010,
+      "to_year": 2010,
+      "engine": "N63",
+      "note": "5 Series Gran Turismo",
       "label": "550i"
     },
     {
@@ -265,6 +307,22 @@
       "to_year": 2005,
       "engine": "N62",
       "label": "645ci"
+    },
+    {
+      "model": "640i",
+      "from_year": 2012,
+      "to_year": 2019,
+      "engine": "N55",
+      "note": "coupe, convertible or Gran Coupe",
+      "label": "640i"
+    },
+    {
+      "model": "640i",
+      "from_year": 2018,
+      "to_year": 2019,
+      "engine": "B58",
+      "note": "6 Series Gran Turismo",
+      "label": "640i"
     },
     {
       "model": "650i",
@@ -295,6 +353,48 @@
       "label": "745li"
     },
     {
+      "model": "740i",
+      "from_year": 2011,
+      "to_year": 2012,
+      "engine": "N54",
+      "label": "740i"
+    },
+    {
+      "model": "740li",
+      "from_year": 2011,
+      "to_year": 2012,
+      "engine": "N54",
+      "label": "740Li"
+    },
+    {
+      "model": "740i",
+      "from_year": 2013,
+      "to_year": 2015,
+      "engine": "N55",
+      "label": "740i"
+    },
+    {
+      "model": "740li",
+      "from_year": 2013,
+      "to_year": 2015,
+      "engine": "N55",
+      "label": "740Li"
+    },
+    {
+      "model": "740i",
+      "from_year": 2016,
+      "to_year": 2025,
+      "engine": "B58",
+      "label": "740i"
+    },
+    {
+      "model": "740li",
+      "from_year": 2016,
+      "to_year": 2022,
+      "engine": "B58",
+      "label": "740Li"
+    },
+    {
       "model": "750i",
       "from_year": 2006,
       "to_year": 2008,
@@ -311,16 +411,23 @@
     {
       "model": "750i",
       "from_year": 2009,
-      "to_year": 2019,
+      "to_year": 2022,
       "engine": "N63",
       "label": "750i"
     },
     {
       "model": "750li",
       "from_year": 2009,
-      "to_year": 2019,
+      "to_year": 2022,
       "engine": "N63",
       "label": "750li"
+    },
+    {
+      "model": "840i",
+      "from_year": 2019,
+      "to_year": 2025,
+      "engine": "B58",
+      "label": "840i"
     },
     {
       "model": "x128i",
@@ -332,9 +439,30 @@
     {
       "model": "x128i",
       "from_year": 2016,
-      "to_year": 2022,
+      "to_year": 2025,
       "engine": "B48",
       "label": "X1 28i"
+    },
+    {
+      "model": "x135i",
+      "from_year": 2013,
+      "to_year": 2015,
+      "engine": "N55",
+      "label": "X1 35i"
+    },
+    {
+      "model": "x228i",
+      "from_year": 2018,
+      "to_year": 2025,
+      "engine": "B48",
+      "label": "X2 28i"
+    },
+    {
+      "model": "x2m35i",
+      "from_year": 2019,
+      "to_year": 2025,
+      "engine": "B48",
+      "label": "X2 M35i"
     },
     {
       "model": "x330si",
@@ -388,14 +516,14 @@
     {
       "model": "x428i",
       "from_year": 2015,
-      "to_year": 2016,
+      "to_year": 2018,
       "engine": "N20",
       "label": "X4 28i"
     },
     {
       "model": "x435i",
       "from_year": 2015,
-      "to_year": 2018,
+      "to_year": 2016,
       "engine": "N55",
       "label": "X4 35i"
     },
@@ -451,9 +579,16 @@
     {
       "model": "x550i",
       "from_year": 2011,
-      "to_year": 2018,
+      "to_year": 2019,
       "engine": "N63",
       "label": "X5 50i"
+    },
+    {
+      "model": "x5m50i",
+      "from_year": 2020,
+      "to_year": 2023,
+      "engine": "N63",
+      "label": "X5 M50i"
     },
     {
       "model": "x635i",
@@ -475,6 +610,41 @@
       "to_year": 2019,
       "engine": "N63",
       "label": "X6 50i"
+    },
+    {
+      "model": "x640i",
+      "from_year": 2020,
+      "to_year": 2025,
+      "engine": "B58",
+      "label": "X6 40i"
+    },
+    {
+      "model": "x6m50i",
+      "from_year": 2020,
+      "to_year": 2023,
+      "engine": "N63",
+      "label": "X6 M50i"
+    },
+    {
+      "model": "x740i",
+      "from_year": 2019,
+      "to_year": 2025,
+      "engine": "B58",
+      "label": "X7 40i"
+    },
+    {
+      "model": "x750i",
+      "from_year": 2019,
+      "to_year": 2020,
+      "engine": "N63",
+      "label": "X7 50i"
+    },
+    {
+      "model": "x7m50i",
+      "from_year": 2020,
+      "to_year": 2022,
+      "engine": "N63",
+      "label": "X7 M50i"
     },
     {
       "model": "z430i",
@@ -510,6 +680,13 @@
       "to_year": 2025,
       "engine": "B48",
       "label": "Z4 30i"
+    },
+    {
+      "model": "z430si",
+      "from_year": 2006,
+      "to_year": 2008,
+      "engine": "N52",
+      "label": "Z4 3.0si"
     },
     {
       "model": "z4m40i",

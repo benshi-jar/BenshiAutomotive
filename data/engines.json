@@ -6,18 +6,27 @@
     "severity": "Our own judgment of how bad it is if ignored: low, medium, high, critical.",
     "risk": "Our own overall rating for a used buyer.",
     "us_models": "Listed from general knowledge, not from the cited source. Verify before launch.",
-    "due_from_miles": "Lowest mileage at which the source says the problem typically appears, as a number. Null when the source gave no mileage, meaning it can happen at any point."
+    "due_from_miles": "Lowest mileage at which the source says the problem typically appears, as a number. Null when the source gave no mileage, meaning it can happen at any point.",
+    "liters": "Engine size in liters and cylinder count, used to match the engine to the size a VIN decodes to.",
+    "also_codes": "Closely related engine codes (usually low-emissions versions sold in some US states) treated as the same engine."
   },
   "known_gaps": [
     "Many cost fields are empty and need real shop quotes",
     "Each engine rests on one enthusiast source, a second source per engine is needed",
-    "US model and year lists are unverified",
+    "The us_models lists here are general knowledge. The model-to-engine table the checker uses (data/models.json) was cross-checked on 2026-11-20, see its checked note",
     "No per-model recall data yet, that comes from NHTSA by VIN"
   ],
   "engines": [
     {
       "code": "N52",
       "desc": "3.0L inline-six, no turbo",
+      "liters": [
+        3.0
+      ],
+      "cylinders": 6,
+      "also_codes": [
+        "N51"
+      ],
       "years": "2004-2015",
       "us_models": [
         "E90/E92 325i, 328i, 330i",
@@ -101,6 +110,10 @@
     {
       "code": "N54",
       "desc": "3.0L inline-six, twin turbo",
+      "liters": [
+        3.0
+      ],
+      "cylinders": 6,
       "years": "2006-2016 (most US cars 2007-2010)",
       "us_models": [
         "E90/E92/E93 335i (2007-2010)",
@@ -195,6 +208,10 @@
     {
       "code": "N55",
       "desc": "3.0L inline-six, single turbo",
+      "liters": [
+        3.0
+      ],
+      "cylinders": 6,
       "years": "2009-2019 (US from 2010-2011)",
       "us_models": [
         "E90/E92 335i (2011-2013)",
@@ -277,6 +294,13 @@
     {
       "code": "N20",
       "desc": "2.0L four-cylinder turbo (N26 is the low-emissions version)",
+      "liters": [
+        2.0
+      ],
+      "cylinders": 4,
+      "also_codes": [
+        "N26"
+      ],
       "years": "2011-2017",
       "us_models": [
         "F30 328i, 320i (2012-2016)",
@@ -320,6 +344,13 @@
     {
       "code": "B48",
       "desc": "2.0L four-cylinder turbo (B46 is the low-emissions version)",
+      "liters": [
+        2.0
+      ],
+      "cylinders": 4,
+      "also_codes": [
+        "B46"
+      ],
       "years": "2014-present",
       "us_models": [
         "F30 330i (2017-2018), G20 330i",
@@ -370,6 +401,10 @@
     {
       "code": "B58",
       "desc": "3.0L inline-six, single turbo",
+      "liters": [
+        3.0
+      ],
+      "cylinders": 6,
       "years": "2015-present",
       "us_models": [
         "F30 340i (2016-2018), G20 M340i",
@@ -426,6 +461,11 @@
     {
       "code": "N62",
       "desc": "4.4L / 4.8L V8, no turbo",
+      "liters": [
+        4.4,
+        4.8
+      ],
+      "cylinders": 8,
       "years": "2001-2010",
       "us_models": [
         "E60 545i, 550i",
@@ -489,6 +529,10 @@
     {
       "code": "N63",
       "desc": "4.4L V8, twin turbo",
+      "liters": [
+        4.4
+      ],
+      "cylinders": 8,
       "years": "2008-present (several revisions)",
       "us_models": [
         "F10 550i",
@@ -546,6 +590,10 @@
     {
       "code": "S65",
       "desc": "4.0L V8, no turbo (M3)",
+      "liters": [
+        4.0
+      ],
+      "cylinders": 8,
       "years": "2007-2013",
       "us_models": [
         "E90 M3 sedan (2008-2011)",
@@ -594,6 +642,10 @@
     {
       "code": "S55",
       "desc": "3.0L inline-six, twin turbo (M2 Competition, M3, M4)",
+      "liters": [
+        3.0
+      ],
+      "cylinders": 6,
       "years": "2014-2020",
       "us_models": [
         "F80 M3 (2015-2018)",
